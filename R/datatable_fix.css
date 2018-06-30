@@ -1,0 +1,14 @@
+div.dt-button-collection a.dt-button {
+  position: static;
+}
+
+body {
+  background: #fcfcfa
+}
+
+div.main-container { max-width: inherit; margin-left: 2cm; }
+
+table.dataTable tbody tr.selected {
+    color: #fcfcfa !important;
+    background-color: #fcfcfa !important;
+}
