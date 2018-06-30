@@ -36,21 +36,23 @@ gemini_caller <- function(gemini_db,
   
   if (is.na(families)){
     gemini_query <- paste("gemini", test, 
-                         "--filter", filter,
-                         "--min-gq", min_gq,
-                         gemini_db, ">", tmp_file)
+                          "--filter", filter,
+                          "--min-gq", min_gq,
+                          gemini_db, ">", tmp_file)
   }
   else{
     gemini_query <- paste("gemini", test, 
-                         "--filter", filter,
-                         "--min-gq", min_gq,
-                         "--families ", families, 
-                         gemini_db, ">", tmp_file)
+                          "--filter", filter,
+                          "--min-gq", min_gq,
+                          "--families ", families, 
+                          gemini_db, ">", tmp_file)
   }
   system(gemini_query)
   input <- readr::read_tsv(tmp_file)
   # force chromosomes as characters, to avoid issues with X, Y
-  input$chrom <- is.character(input$chrom)
-  input$test <- test
+  if (nrow(input)>0){
+    input$chrom <- as.character(input$chrom)
+    input$test <- test
+  }
   input
 }
