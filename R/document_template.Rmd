@@ -12,11 +12,11 @@ patient_MVL_excel:
 patient_ID:
   value: x
 ---
-  
-  ```{r, include = FALSE}
+
+```{r, include = FALSE}
 knitr::opts_chunk$set(echo = F,
-                      warning = F,
-                      message = F)
+warning = F,
+message = F)
 ```
 
 ```{r, include = FALSE}
@@ -26,6 +26,38 @@ library(tidyr)
 library(rmarkdown)
 ```
 
+
+```{r}
+#GEMINI_data <- z
+
+all_cols <- seq(1,ncol(GEMINI_data))
+
+core_fields <- c("chrom", "end", "ref", "alt", "gene", "transcript", "hgvsc", "hgvsp", "aaf", "gno_af_all", "exac_num_hom_alt", "clinvar_id", "clinvar_sig")
+
+core_index <- match(core_fields, colnames(GEMINI_data))
+neg_core_index <- setdiff(all_cols, core_index)
+
+GEMINI_data %>%  
+  DT::datatable(width=1200, 
+                escape = FALSE,
+                rownames = F, 
+                class='compact', 
+                extensions = c('FixedColumns','Buttons','FixedHeader'),
+                options = list(columnDefs=list(list(targets=neg_core-1, visible = FALSE)),
+                               pageLength = 30,
+                               fixedHeader = TRUE,
+                               lengthMenu = list(c(5, 30, 100, -1), list('5', '30', '100', 'All')),
+                               dom = 'Bfrtip',
+                               buttons = list(list(extend='pageLength'),
+                                              list(extend='colvis', collectionLayout='four-column'),
+                                              list(extend='colvisGroup', text='Core Fields', 
+                                                   hide=paste(neg_core-1, collapse = ','), 
+                                                   show = paste(core-1, collapse = ',')),
+                                              list(extend='colvisGroup', text='Show All', show = ':hidden' )),
+                               columnDefs=list(list(targets=c(1), class="dt-left"))))
+
+
+```
 
 ```{r, include=F}
 # find gt index
@@ -147,28 +179,27 @@ out
 This report is auto-generated with scripts written by David McGaughey. This report was created on `r strftime(Sys.time(), format = "%B %d, %Y")`
 
 The code that processes the data and generates the reports is at https://github.com/davemcg/casey_to_gemini/
-  
-  The base information for this report is the MVL-provided vcf, which contains all variants called for the sample. The vcf is reprocessed with [vt](https://genome.sph.umich.edu/wiki/Vt) to left-align the variants and split multi-allelics onto separate lines. All OGVFB vcfs from MVL are then aggregated into one master vcf, which is re-annotated with data sources useful for our cohohrt. The annotated vcf is loaded into [Gemini](http://gemini.readthedocs.io) and each sample is queried against the Gemini database to produce a table containing information in this report. The reactive report itself is written with R markdown. 
+
+The base information for this report is the MVL-provided vcf, which contains all variants called for the sample. The vcf is reprocessed with [vt](https://genome.sph.umich.edu/wiki/Vt) to left-align the variants and split multi-allelics onto separate lines. All OGVFB vcfs from MVL are then aggregated into one master vcf, which is re-annotated with data sources useful for our cohohrt. The annotated vcf is loaded into [Gemini](http://gemini.readthedocs.io) and each sample is queried against the Gemini database to produce a table containing information in this report. The reactive report itself is written with R markdown. 
 
 **FAQ**:
-  
-  * What is the Primary / Secondary distinction?
-  * Primary variants are those that are labeled by MVL as being potentially causative for the disease. Secondary are the remaining variants. 
+
+* What is the Primary / Secondary distinction?
+* Primary variants are those that are labeled by MVL as being potentially causative for the disease. Secondary are the remaining variants. 
 * What does it mean if a variant is marked in red?
-  * This means that the variant has an impact severity of ['HIGH'](http://gemini.readthedocs.io/en/latest/content/database_schema.html#details-of-the-impact-and-impact-severity-columns) **or** is marked as pathogenic in ClinVar **and** has a population allele frequency less than 10%. 
-                                                                   
-                                                                   **WARNINGS/LIMITATIONS** 
-                                                                     
-                                                                     This report *may* have mistakes and omissions including, but not limited to:
-                                                                     
-                                                                     - Failure to identify the MVL marked likely variants (marked in red on the excel sheet)
-                                                                   - Inconsistent variant position and representation between the MVL excel file and this report
-                                                                   - Only variants from the vcf are included - CNV/etc. analyses will not be reported. 
-                                                                   - Heterygous (num het) and Homozygous Alternative (num hom alt) allele counts **do not have a denominator** as we have no way which to know which samples in the OGVFB cohort have the reference genotype
-                                                                   
-                                                                   The definitive (CLIA) source of the genotype calls and analysis are the original.xlsx file and MVL/John Chiang clinical report, respectively
-                                                                   
-                                                                   
-                                                                   
-                                                                   
-                                                                   
+* This means that the variant has an impact severity of ['HIGH'](http://gemini.readthedocs.io/en/latest/content/database_schema.html#details-of-the-impact-and-impact-severity-columns) **or** is marked as pathogenic in ClinVar **and** has a population allele frequency less than 10%. 
+
+**WARNINGS/LIMITATIONS** 
+
+This report *may* have mistakes and omissions including, but not limited to:
+
+- Failure to identify the MVL marked likely variants (marked in red on the excel sheet)
+- Inconsistent variant position and representation between the MVL excel file and this report
+- Only variants from the vcf are included - CNV/etc. analyses will not be reported. 
+- Heterygous (num het) and Homozygous Alternative (num hom alt) allele counts **do not have a denominator** as we have no way which to know which samples in the OGVFB cohort have the reference genotype
+
+The definitive (CLIA) source of the genotype calls and analysis are the original.xlsx file and MVL/John Chiang clinical report, respectively
+
+
+
+
