@@ -3,6 +3,7 @@ date: '`r strftime(Sys.time(), format = "%B %d, %Y")`'
 title: 'Sample Report'
 output: 
   html_document:
+    theme: flatly
   css: datatable_fix.css
 params:
   gemini_return:
@@ -15,191 +16,56 @@ patient_ID:
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(echo = F,
-warning = F,
-message = F)
+                      warning = F,
+                      message = F)
 ```
 
-```{r, include = FALSE}
-library(data.table)
-library(dplyr)
-library(tidyr)
-library(rmarkdown)
-```
-
-
-```{r}
-#GEMINI_data <- z
-
-all_cols <- seq(1,ncol(GEMINI_data))
-
-core_fields <- c("chrom", "end", "ref", "alt", "gene", "transcript", "hgvsc", "hgvsp", "aaf", "gno_af_all", "exac_num_hom_alt", "clinvar_id", "clinvar_sig")
-
-core_index <- match(core_fields, colnames(GEMINI_data))
-neg_core_index <- setdiff(all_cols, core_index)
-
-GEMINI_data %>%  
-  DT::datatable(width=1200, 
-                escape = FALSE,
-                rownames = F, 
-                class='compact', 
-                extensions = c('FixedColumns','Buttons','FixedHeader'),
-                options = list(columnDefs=list(list(targets=neg_core-1, visible = FALSE)),
-                               pageLength = 30,
-                               fixedHeader = TRUE,
-                               lengthMenu = list(c(5, 30, 100, -1), list('5', '30', '100', 'All')),
-                               dom = 'Bfrtip',
-                               buttons = list(list(extend='pageLength'),
-                                              list(extend='colvis', collectionLayout='four-column'),
-                                              list(extend='colvisGroup', text='Core Fields', 
-                                                   hide=paste(neg_core-1, collapse = ','), 
-                                                   show = paste(core-1, collapse = ',')),
-                                              list(extend='colvisGroup', text='Show All', show = ':hidden' )),
-                               columnDefs=list(list(targets=c(1), class="dt-left"))))
-
-
-```
-
-```{r, include=F}
-# find gt index
-#gts_index <- grep('gts',colnames(gem))
-#colnames(gem)[gts_index] <- 'Genotype'
-
-# prep for printing
-gem_view <- gem %>% 
-  mutate(ID=paste(chrom,end,ref,alt,sep='-')) %>% 
-  select(ID, Genotype, vcf_id:hom_alt_samples, Priority, TimesObservedPerPanel, TimesObservedPerPanelGroup) %>% mutate_if(is.factor, as.character) %>% data.table()
-
-
-# format DF
-gem_view <- gem_view %>% 
-  dplyr::mutate(clinvar_diseases = gsub('\\|',' ', as.character(clinvar_diseases)),
-                variant_samples = gsub(',', ', ', as.character(variant_samples)),
-                het_samples = gsub(',', ', ', as.character(het_samples)),
-                hom_alt_samples = gsub(',', ', ', as.character(hom_alt_samples)),
-                `Times Observed Per Panel` = as.numeric(TimesObservedPerPanel),
-                `Times Observed Per Panel Group` = as.numeric(TimesObservedPerPanelGroup),
-                DeleteriousMark = ifelse((impact_severity=='HIGH' | grepl('pathog', clinvar_sig)) & as.numeric(max_aaf_all) < 0.1, 'Candidate', NA),
-                impact_severity = factor(impact_severity, levels = c('HIGH','MED','LOW',NA))) 
-
-gem_view$hgvsp = sapply(gem_view$hgvsp, function(x) strsplit(as.character(x),':')[[1]][2])
-gem_view$ID = sapply(gem_view$ID, function(x) link_generator('http://gnomad.broadinstitute.org/variant/',as.character(x)))
-gem_view$clinvar_sig = apply(gem_view, 1, function(x) clinvar_link_generator('https://www.ncbi.nlm.nih.gov/clinvar?term=',as.character(x['clinvar_id']), as.character(x['clinvar_sig'])))
-gem_view$rs_ids= sapply(gem_view$rs_ids, function(x) link_generator('https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=',as.character(x)) )
-gem_view$'Google Scholar' = apply(gem_view, 1, function(x) google_link_generator(as.character(x['hgvsc']), as.character((x['gene']))) )
-gem_view$gene = sapply(gem_view$gene, function(x) link_generator('https://www.omim.org/search/?search=', as.character(x)) )
-#gem_view$vcf_id = sapply(gem_view$vcf_id, function(x) link_generator('https://www.mutalyzer.nl/name-checker?description=',as.character(x)) )
-gem_view <- gem_view %>% 
-  dplyr::arrange(impact_severity) %>% 
-  data.table()
-colnames(gem_view) <- gsub('_', ' ', colnames(gem_view))
-
-gts_index <- grep('Genotype',colnames(gem_view))
-max_aaf_all <- grep('max aaf all', colnames(gem_view))
-# find cohort counts
-het_index <- grep('^num het', colnames(gem_view))
-hom_index <- grep('^num hom alt', colnames(gem_view))
-times_panel <- grep('Times Observed Per Panel$', colnames(gem_view), ignore.case = T)
-group_panel <- grep('Times Observed Per Panel Group', colnames(gem_view), ignore.case = T)
-# scholar
-gs <- grep('Scholar', colnames(gem_view))
-# select indices for different column views
-all_cols <- seq(1,ncol(gem_view)) 
-exac <- c(1, gts_index, 4, 7, grep('exac', colnames(gem_view), ignore.case = T))
-neg_exac <- setdiff(all_cols, exac)
-core <- c(1, gts_index, 4,5,7,8,9,10,15, max_aaf_all, het_index, hom_index, times_panel, group_panel, gs) 
-neg_core <- setdiff(all_cols, core) 
-```
 
 ## `r params$patient_ID` {.tabset}
 
-### Primary Variants
+### Variation
 ```{r}
-if (nrow(mvl_excel %>% filter(Priority == 'Primary')) == 0){
-  out <- 'No primary variants'
-} else {
-  if (nrow(mvl_not_ever_match %>% filter(Priority == 'Primary')) > 0){
-    print(paste('Failed to match the following MVL high priority variants:', paste(mvl_not_ever_match %>% filter(Priority=='Primary') %>% pull(HGVS), collapse = ',')))
-  }
-  out <- gem_view %>% 
-    dplyr::filter(Priority=='Primary') %>% 
-    dplyr::arrange(DeleteriousMark, `impact severity`) %>% 
-    DT::datatable(width=1200, 
-                  escape = FALSE,
-                  rownames = F, 
-                  class='compact', 
-                  extensions = c('FixedColumns','Buttons','FixedHeader'), 
-                  options = list(columnDefs=list(list(targets=neg_core-1, visible = FALSE)),
-                                 pageLength = 30,
-                                 fixedHeader = TRUE,
-                                 lengthMenu = list(c(5, 30, 100, -1), list('5', '30', '100', 'All')),
-                                 dom = 'Bfrtip',
-                                 buttons = list(list(extend='pageLength'),
-                                                list(extend='colvis', collectionLayout='four-column'),
-                                                list(extend='colvisGroup', text='Core Fields', hide=paste(neg_core-1, collapse = ','), show = paste(core-1, collapse = ',')),
-                                                list(extend='colvisGroup', text='ExAC', hide=paste(neg_exac-1,collapse = ','), show = paste(exac-1, collapse = ',' )),
-                                                list(extend='colvisGroup', text='Show All', show = ':hidden' )),
-                                 columnDefs=list(list(targets=c(1), class="dt-left")))) %>% 
-    DT::formatSignif(columns=c('max aaf all','af exac afr','af exac amr','af exac eas','af exac oth','af exac sas','an exac all','mis z','pli'),3) %>% 
-    DT::formatStyle(columns = c('DeleteriousMark'), target = 'row', backgroundColor = DT::styleEqual(c(NA, 'Candidate'), c('#fcfcfa', '#ffd3d3')))
-}
+GEMINI_data$test <- as.factor(test) 
+DT::datatable(GEMINI_data, width=1200, 
+              escape = FALSE,
+              rownames = F, 
+              class='compact', 
+              filter='bottom',
+              extensions = c('FixedColumns','Buttons','FixedHeader'),
+              options = list(columnDefs=list(list(targets=neg_core_index-1, visible = FALSE)),
+                             pageLength = 30,
+                             fixedHeader = TRUE,
+                             lengthMenu = list(c(5, 30, 100, -1), list('5', '30', '100', 'All')),
+                             dom = 'Bfrtip',
+                             buttons = list(list(extend='pageLength'),
+                                            list(extend='colvis', collectionLayout='four-column'),
+                                            list(extend='colvisGroup', text='Core Fields', 
+                                                 hide=paste(neg_core_index-1, collapse = ','), 
+                                                 show = paste(core_index-1, collapse = ',')),
+                                            list(extend='colvisGroup', text='Show All', show = ':hidden' )),
+                             columnDefs=list(list(targets=c(1), class="dt-left"))))
 
-out
 ```
 
-### Secondary Variants
+### Statistics
 ```{r}
+# Number of results per test
 
-out <- gem_view %>% 
-  dplyr::filter(Priority == 'Secondary' | is.na(Priority)) %>% 
-  dplyr::arrange(DeleteriousMark, `impact severity`) %>% 
-  DT::datatable(width=1200, 
-                escape = FALSE,
-                rownames = F, 
-                class='compact', 
-                extensions = c('FixedColumns','Buttons','FixedHeader'), 
-                options = list(columnDefs=list(list(targets=neg_core-1, visible = FALSE)),
-                               pageLength = 30,
-                               fixedHeader = TRUE,
-                               lengthMenu = list(c(5, 30, 100, -1), list('5', '30', '100', 'All')),
-                               dom = 'Bfrtip',
-                               buttons = list(list(extend='pageLength'),
-                                              list(extend='colvis', collectionLayout='four-column'),
-                                              list(extend='colvisGroup', text='Core Fields', hide=paste(neg_core-1, collapse = ','), show = paste(core-1, collapse = ',')),
-                                              list(extend='colvisGroup', text='ExAC', hide=paste(neg_exac-1,collapse = ','), show = paste(exac-1, collapse = ',' )),
-                                              list(extend='colvisGroup', text='Show All', show = ':hidden' )),
-                               columnDefs=list(list(targets=c(1), class="dt-left")))) %>% 
-  DT::formatSignif(columns=c('max aaf all','af exac afr','af exac amr','af exac eas','af exac oth','af exac sas','an exac all','mis z','pli'),3) %>% 
-  DT::formatStyle(columns = c('DeleteriousMark'), target = 'row', backgroundColor = DT::styleEqual(c(NA, 'Candidate'), c('#fcfcfa', '#ffd3d3')))
+# 
 
-out
 ```
 
 ### Info
 
-This report is auto-generated with scripts written by David McGaughey. This report was created on `r strftime(Sys.time(), format = "%B %d, %Y")`
+This report is auto-generated with the [See GEM](https://github.com/davemcg/See_GEM) R package on `r strftime(Sys.time(), format = "%B %d, %Y")`
 
-The code that processes the data and generates the reports is at https://github.com/davemcg/casey_to_gemini/
-
-The base information for this report is the MVL-provided vcf, which contains all variants called for the sample. The vcf is reprocessed with [vt](https://genome.sph.umich.edu/wiki/Vt) to left-align the variants and split multi-allelics onto separate lines. All OGVFB vcfs from MVL are then aggregated into one master vcf, which is re-annotated with data sources useful for our cohohrt. The annotated vcf is loaded into [Gemini](http://gemini.readthedocs.io) and each sample is queried against the Gemini database to produce a table containing information in this report. The reactive report itself is written with R markdown. 
+The analyst for this report populated the information in this dynamic documents with a variety of GEMINI queries. Each of of the types of queries run can be found by filtering on the `test` column.
 
 **FAQ**:
 
-* What is the Primary / Secondary distinction?
-* Primary variants are those that are labeled by MVL as being potentially causative for the disease. Secondary are the remaining variants. 
 * What does it mean if a variant is marked in red?
 * This means that the variant has an impact severity of ['HIGH'](http://gemini.readthedocs.io/en/latest/content/database_schema.html#details-of-the-impact-and-impact-severity-columns) **or** is marked as pathogenic in ClinVar **and** has a population allele frequency less than 10%. 
 
 **WARNINGS/LIMITATIONS** 
-
-This report *may* have mistakes and omissions including, but not limited to:
-
-- Failure to identify the MVL marked likely variants (marked in red on the excel sheet)
-- Inconsistent variant position and representation between the MVL excel file and this report
-- Only variants from the vcf are included - CNV/etc. analyses will not be reported. 
-- Heterygous (num het) and Homozygous Alternative (num hom alt) allele counts **do not have a denominator** as we have no way which to know which samples in the OGVFB cohort have the reference genotype
-
-The definitive (CLIA) source of the genotype calls and analysis are the original.xlsx file and MVL/John Chiang clinical report, respectively
-
-
 
 
