@@ -3,9 +3,9 @@
 #' Calls GEMINI's built in tools to retrieve proband/trio specific variants. Returns a tibble of all of the columns available in your GEMINI database. 
 #' 
 #' @param gemini_db is the name of your GEMINI database (with path, if necessary)
-#' @param test is the name of the GEMINI sub command to call. Validate tests are \
-#'autosomal_dominant, autosomal_recessive, comp_hets, mendel_errors, x_linked_de_novo, \
-#'x_linked_dominant, x_linked_recessive
+#' @param test is the name of the GEMINI sub command to call. Accepted tests are 
+#' autosomal_dominant, autosomal_recessive, comp_hets, mendel_errors, x_linked_de_novo,
+#' x_linked_dominant, x_linked_recessive
 #' @param filter if you want to change the default filtering criteria
 #' @param min_gq minimum genotype quality (default is set at 20)
 #' @param families family name that GEMINI will use to identify proband, mother, and father
@@ -19,10 +19,10 @@
 
 gemini_caller <- function(gemini_db, 
                           test = "autosomal_recessive",
-                          filter = " \" + aaf < 0.1 AND aaf_esp_all < 0.01 AND \
+                          filter = "aaf < 0.1 AND aaf_esp_all < 0.01 AND \
                         aaf_1kg_all < 0.01 AND af_exac_all < 0.01 AND \
                         (is_coding=1 OR is_splicing=1 OR impact_severity='HIGH') \
-                        AND filter is NULL \" ",
+                        AND filter is NULL",
                           min_gq = 20,
                           families = NA,
                           ...){
@@ -36,13 +36,13 @@ gemini_caller <- function(gemini_db,
   
   if (is.na(families)){
     gemini_query <- paste("gemini", test, 
-                          "--filter", filter,
+                          "--filter \"", filter, "\"",
                           "--min-gq", min_gq,
                           gemini_db, ">", tmp_file)
   }
   else{
     gemini_query <- paste("gemini", test, 
-                          "--filter", filter,
+                          "--filter \"", filter, "\"",
                           "--min-gq", min_gq,
                           "--families ", families, 
                           gemini_db, ">", tmp_file)
