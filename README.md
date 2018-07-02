@@ -2,7 +2,7 @@ R library which takes output from [GEMINI](http://gemini.readthedocs.io) and wra
 
 # Wait, what?
 
-Right click [here](inst/extdata/demo.html) and select 'download source' for a sample file. 
+Click [here](inst/extdata/demo.html) and select 'Download' for a sample file. 
 
 # Who would use this R library?
 The bioinformatician who is running (scripted) GEMINI queries and would like to share results with someone who isn't going to run custom GEMINI queries for their samples. 
