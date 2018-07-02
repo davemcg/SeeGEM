@@ -21,22 +21,22 @@
 
 link_generator <- function(base_url, ID, split_on=',', link_name = NA){
   ID <- as.character(ID)
-  link_name = as.character(ID)
-  if (is.na(ID) | is.na(base_url) | ID == 'None' | base_url == 'None'){
+  link_name = as.character(link_name)
+  if (is.na(ID) | is.na(base_url) | ID == 'None' | base_url == 'None' | ID == '-1'){
     url <- NA
   }
   else {
-    ends <- strsplit(ID, split_on)[[1]]
+    items <- strsplit(ID, split_on)[[1]]
     url <- ''
-    for (end in ends){
+    for (single_item in items){
       if (is.na(link_name)){
-        url <- paste(paste0('<a href="', base_url, end, '" target="_blank">', end, '</a> '), url)
+        url <- paste(paste0('<a href="', base_url, single_item, '" target="_blank">', single_item, '</a> '), url)
       }
       else{
-        url <- paste(paste0('<a href="', base_url, end, '" target="_blank">', link_name, '</a> '), url)
+        url <- paste(paste0('<a href="', base_url, single_item, '" target="_blank">', link_name, '</a> '), url)
       }
     }
-    if (ID == 'None') {
+    if (ID == 'None' | ID == '-1') {
       url <- NA
     }
   }
