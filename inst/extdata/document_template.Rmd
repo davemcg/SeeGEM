@@ -1,6 +1,6 @@
 ---
 date: '`r strftime(Sys.time(), format = "%B %d, %Y")`'
-title: 'Sample Report'
+title: '`r params$title`'
 output: 
   html_document:
     theme: flatly
@@ -11,7 +11,9 @@ params:
   stats:
     value: x
   sample_name:
-    value: x
+    value: FILL_IN
+  title:
+    value: SampleReport
 ---
 
 ```{r, include = FALSE}
@@ -21,6 +23,7 @@ knitr::opts_chunk$set(echo = F,
 ```
 
 ```{r, include = FALSE}
+# load in data to be displayed
 load(params$GEMINI_data_frame)
 document_data <- See_GEM_formatter(GEMINI_data)
 ```
@@ -30,7 +33,6 @@ document_data <- See_GEM_formatter(GEMINI_data)
 
 ### Variation
 ```{r}
-document_data$GEMINI_data$test <- as.factor(document_data$GEMINI_data$test) 
 DT::datatable(document_data$GEMINI_data, width=1200, 
               escape = FALSE,
               rownames = F, 
