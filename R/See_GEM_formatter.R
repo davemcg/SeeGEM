@@ -8,6 +8,7 @@
 #' @param core_fields These are the columns that will be shown by default
 #' @param linkify Do you want to turn format fields as hyperlinks? Hard-coded to 
 #' position id (gnomAD), gene (OMIM), ClinVar ID (ClinVar), rs_id (dbSNP).
+#' @param underscore_to_space Do you want to replace underscores with spaces?
 #' @return None
 #' 
 #' @export
@@ -22,12 +23,23 @@ See_GEM_formatter <- function(GEMINI_data,
                                       "hgvsc", "hgvsp", "aaf", "gno_af_all", 
                                       "exac_num_hom_alt", "clinvar_id", "rs_ids", 
                                       "GoogleScholar"),
-                      linkify = 'yes'
+                      linkify = 'yes',
+                      underscore_to_space = 'yes'
                       ){
   #load('inst/extdata/gemini.Rdata')
   #GEMINI_data <- data.table::rbindlist(x) %>% data.frame()
+  # replace all underscores with a space
+  if (underscore_to_space == 'yes'){
+  GEMINI_data <- GEMINI_data %>% mutate_if(is.character, stringr::str_replace_all, pattern = '_', replacement = ' ') %>% 
+    mutate_if(is.factor, stringr::str_replace_all, pattern = '_', replacement = ' ')
+  }
+  
   # set test column as factor
   GEMINI_data$test <- as.factor(GEMINI_data$test)
+  # set impact_so to factor
+  if ('impact_so' %in% colnames(GEMINI_data)){
+    GEMINI_data$impact_so <- as.factor(GEMINI_data$impact_so)
+  }
   # replace 'None' with -1
   GEMINI_data[GEMINI_data == 'None'] <- -1
   # build pos_id
@@ -37,7 +49,14 @@ See_GEM_formatter <- function(GEMINI_data,
                                                 x['ref'], 
                                                 x['alt'], 
                                                 sep = '-'))
-
+  # add spacing to hgvs_c and hgvs_p
+  if ('hgvsc' %in% colnames(GEMINI_data)){
+    GEMINI_data$hgvsc <- gsub(':',': ', GEMINI_data$hgvsc)
+  }
+  if ('hgvsp' %in% colnames(GEMINI_data)){
+    GEMINI_data$hgvsp <- gsub(':',': ', GEMINI_data$hgvsp)
+    GEMINI_data$hgvsp <- gsub('%3','>', GEMINI_data$hgvsp)
+  }
   # linkify
   if (linkify == 'yes'){
     GEMINI_data$pos_id <- sapply(GEMINI_data$pos_id, 
@@ -56,6 +75,7 @@ See_GEM_formatter <- function(GEMINI_data,
     GEMINI_data$gene <- sapply(GEMINI_data$gene, 
                               function(x) link_generator('https://www.omim.org/search/?search=', x))
   }
+
   
   # indices of all columns
   all_cols <- seq(1,ncol(GEMINI_data))
