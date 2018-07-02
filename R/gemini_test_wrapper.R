@@ -1,11 +1,12 @@
 #' GEMINI query wrapper
 #' 
-#' Calls GEMINI's built in tools to retrieve proband/trio specific variants. Returns a tibble of all of the columns available in your GEMINI database. 
+#' Calls GEMINI's built in tools (e.g. autosomal_dominant, comp_hets) to retrieve proband/trio specific variants. Returns a tibble of all of the columns available in your GEMINI database. 
 #' 
 #' @param gemini_db is the name of your GEMINI database (with path, if necessary)
 #' @param test is the name of the GEMINI sub command to call. Accepted tests are 
 #' autosomal_dominant, autosomal_recessive, comp_hets, mendel_errors, x_linked_de_novo,
-#' x_linked_dominant, x_linked_recessive
+#' x_linked_dominant, x_linked_recessive. Use `gemini_query_caller` if you want to
+#' run a `gemini query -q` style command. 
 #' @param filter if you want to change the default filtering criteria
 #' @param min_gq minimum genotype quality (default is set at 20)
 #' @param families family name that GEMINI will use to identify proband, mother, and father
@@ -19,7 +20,7 @@
 #' gemini_caller('/path/to/your/gemini.db', 'autosomal_dominant', families = 'fam007')
 
 
-gemini_caller <- function(gemini_db, 
+gemini_test_caller <- function(gemini_db, 
                           test = "autosomal_recessive",
                           filter = "aaf < 0.1 AND aaf_esp_all < 0.01 AND \
                         aaf_1kg_all < 0.01 AND af_exac_all < 0.01 AND \
