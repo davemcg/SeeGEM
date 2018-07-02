@@ -30,19 +30,23 @@ document_data <- See_GEM_formatter(GEMINI_data)
 
 
 ## `r params$sample_name` {.tabset}
+```{r, include = FALSE}
+#round off values <1 or >1000
 
+```
 ### Variation
 ```{r}
-DT::datatable(document_data$GEMINI_data, width=1200, 
+
+DT::datatable(document_data$GEMINI_data %>% mutate_if(is.numeric, funs(as.numeric(formatC(., format = "e", digits = 2)))), #width=1200, 
               escape = FALSE,
               rownames = F, 
               class='compact', 
               filter='bottom',
               extensions = c('FixedColumns','Buttons','FixedHeader'),
               options = list(columnDefs=list(list(targets=document_data$neg_core_index-1, visible = FALSE)),
-                             pageLength = 30,
+                             pageLength = 15,
                              fixedHeader = TRUE,
-                             lengthMenu = list(c(5, 30, 100, -1), list('5', '30', '100', 'All')),
+                             lengthMenu = list(c(5, 15, 30, 60, 100, -1), list('5', '15', '30', '60', '100', 'All')),
                              dom = 'Bfrtip',
                              buttons = list(list(extend='pageLength'),
                                             list(extend='colvis', collectionLayout='four-column'),
@@ -50,7 +54,7 @@ DT::datatable(document_data$GEMINI_data, width=1200,
                                                  hide=paste(document_data$neg_core_index-1, collapse = ','), 
                                                  show = paste(document_data$core_index-1, collapse = ',')),
                                             list(extend='colvisGroup', text='Show All', show = ':hidden' )),
-                             columnDefs=list(list(targets=c(1), class="dt-left"))))
+                             columnDefs=list(list(targets=c(1), class="dt-left")))) 
 
 ```
 
