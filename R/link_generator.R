@@ -4,14 +4,16 @@
 #' You must use html format to specify special characters and spaces. 
 #' Used in See_GEM_formatter function to format specified colums. 
 #'
-#'@param base_url The consistent base URL 
-#'@param ID The column ID to build the unique part of the URL
-#'@param split_on What delimiter to split the field on? Defaults to comma.
-#'@param link_name What to use for the link name? Defaults to using the row value of the column
+#' @param base_url The consistent base URL 
+#' @param ID The column ID to build the unique part of the URL
+#' @param split_on What delimiter to split the field on? Defaults to comma.
+#' @param link_name What to use for the link name? Defaults to using the row value of the column
 #'
 #'@return None
 #'
-#'@examples
+#' @export
+#'
+#' @examples
 #' GEMINI_data$rs_ids <- sapply(gem_view$rs_ids, 
 #' function(x) 
 #' link_generator('https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=', as.character(x)) )
