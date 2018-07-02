@@ -10,6 +10,8 @@
 #' position id (gnomAD), gene (OMIM), ClinVar ID (ClinVar), rs_id (dbSNP).
 #' @return None
 #' 
+#' @export
+#' 
 #' @examples 
 #' GEMINI_data <- data.table::rbindlist(gemini_caller('/path/to/gemini.db', 'autosomal_recessive'),
 #' gemini_caller('/path/to/gemini.db', 'autosomal_dominant', "aaf < 0.05 AND aaf_esp_all < 0.001 AND aaf_1kg_all < 0.001 AND af_exac_all < 0.001 AND (is_coding=1 OR is_splicing=1 OR impact_severity='HIGH') AND filter is NULL"))
@@ -60,14 +62,14 @@ See_GEM_formatter <- function(GEMINI_data,
   neg_core_index <- setdiff(all_cols, core_index)
 
   # reorder to match core_field order
-  GEMINI_data <- GEMINI_data[,c(core_index, neg_core_index)]
+  GEMINI_data <- GEMINI_data[c(core_index, neg_core_index),]
 
   core_index <- match(core_fields, colnames(GEMINI_data))
   neg_core_index <- setdiff(all_cols, core_index)
   
 
   out <- list()
-  out$GEMINI_data <- GEMINI_data
+  out$GEMINI_data <- data.frame(GEMINI_data)
   out$all_cols <- all_cols
   out$core_index <- core_index
   out$neg_core_index <- neg_core_index
