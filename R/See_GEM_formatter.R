@@ -18,15 +18,18 @@
 #' See_GEM_formatter(GEMINI_data)
 
 See_GEM_formatter <- function(GEMINI_data, 
-                      core_fields = c("test", "pos_id", "gene", "transcript", 
+                      core_fields = c("test", "pos_id", "gene", "impact_so",
                                       "hgvsc", "hgvsp", "aaf", "gno_af_all", 
                                       "exac_num_hom_alt", "clinvar_id", "rs_ids", 
-                                      "Google Scholar"),
+                                      "GoogleScholar"),
                       linkify = 'yes'
                       ){
   #load('inst/extdata/gemini.Rdata')
   #GEMINI_data <- data.table::rbindlist(x) %>% data.frame()
-  
+  # set test column as factor
+  GEMINI_data$test <- as.factor(GEMINI_data$test)
+  # replace 'None' with -1
+  GEMINI_data[GEMINI_data == 'None'] <- -1
   # build pos_id
   GEMINI_data$pos_id <- apply(GEMINI_data, 1, 
                               function(x) paste(x['chrom'], 
@@ -46,9 +49,9 @@ See_GEM_formatter <- function(GEMINI_data,
                                                               split_on = '\\|'))
     GEMINI_data$rs_ids <- sapply(GEMINI_data$rs_ids, 
                                function(x) link_generator('https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=', x))
-    GEMINI_data$'Google Scholar' <- apply(GEMINI_data, 1, 
+    GEMINI_data$GoogleScholar <- apply(GEMINI_data, 1, 
                                          function(x) link_generator('https://scholar.google.com/scholar?hl=en&q=', 
-                                                                    paste0(strsplit(gsub('>', '%3E',x['hgvsc']), ':')[[1]][2],'&nbsp', x['gene']), 
+                                                                    paste0(strsplit(gsub('>', '%3E',x['hgvsc']), ':')[[1]][2],'%20', x['gene']), 
                                                                     link_name = 'Feeling lucky?'))
     GEMINI_data$gene <- sapply(GEMINI_data$gene, 
                               function(x) link_generator('https://www.omim.org/search/?search=', x))
@@ -62,7 +65,8 @@ See_GEM_formatter <- function(GEMINI_data,
   neg_core_index <- setdiff(all_cols, core_index)
 
   # reorder to match core_field order
-  GEMINI_data <- GEMINI_data[c(core_index, neg_core_index),]
+  GEMINI_data <- data.frame(GEMINI_data)
+  GEMINI_data <- GEMINI_data[,c(core_index, neg_core_index)]
 
   core_index <- match(core_fields, colnames(GEMINI_data))
   neg_core_index <- setdiff(all_cols, core_index)
