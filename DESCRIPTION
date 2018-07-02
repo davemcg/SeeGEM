@@ -1,3 +1,4 @@
 Package: SeeGem
 Version: 0.01
-Depends: R (>=3.4.0), readr, dplyr, data.table
+Depends: R (>= 3.4.0), readr, dplyr, data.table
+RoxygenNote: 6.0.1
