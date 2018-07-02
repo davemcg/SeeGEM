@@ -6,12 +6,12 @@ output:
     theme: flatly
   css: datatable_fix.css
 params:
-  gemini_return:
-  value: x
-patient_MVL_excel:
-  value: x
-patient_ID:
-  value: x
+  GEMINI_data_frame:
+    value: x
+  stats:
+    value: x
+  sample_name:
+    value: x
 ---
 
 ```{r, include = FALSE}
@@ -20,19 +20,24 @@ knitr::opts_chunk$set(echo = F,
                       message = F)
 ```
 
+```{r, include = FALSE}
+load(params$GEMINI_data_frame)
+document_data <- See_GEM_formatter(GEMINI_data)
+```
 
-## `r params$patient_ID` {.tabset}
+
+## `r params$sample_name` {.tabset}
 
 ### Variation
 ```{r}
-GEMINI_data$test <- as.factor(test) 
-DT::datatable(GEMINI_data, width=1200, 
+document_data$GEMINI_data$test <- as.factor(document_data$GEMINI_data$test) 
+DT::datatable(document_data$GEMINI_data, width=1200, 
               escape = FALSE,
               rownames = F, 
               class='compact', 
               filter='bottom',
               extensions = c('FixedColumns','Buttons','FixedHeader'),
-              options = list(columnDefs=list(list(targets=neg_core_index-1, visible = FALSE)),
+              options = list(columnDefs=list(list(targets=document_data$neg_core_index-1, visible = FALSE)),
                              pageLength = 30,
                              fixedHeader = TRUE,
                              lengthMenu = list(c(5, 30, 100, -1), list('5', '30', '100', 'All')),
@@ -40,8 +45,8 @@ DT::datatable(GEMINI_data, width=1200,
                              buttons = list(list(extend='pageLength'),
                                             list(extend='colvis', collectionLayout='four-column'),
                                             list(extend='colvisGroup', text='Core Fields', 
-                                                 hide=paste(neg_core_index-1, collapse = ','), 
-                                                 show = paste(core_index-1, collapse = ',')),
+                                                 hide=paste(document_data$neg_core_index-1, collapse = ','), 
+                                                 show = paste(document_data$core_index-1, collapse = ',')),
                                             list(extend='colvisGroup', text='Show All', show = ':hidden' )),
                              columnDefs=list(list(targets=c(1), class="dt-left"))))
 
@@ -59,7 +64,7 @@ DT::datatable(GEMINI_data, width=1200,
 
 This report is auto-generated with the [See GEM](https://github.com/davemcg/See_GEM) R package on `r strftime(Sys.time(), format = "%B %d, %Y")`
 
-The analyst for this report populated the information in this dynamic documents with a variety of GEMINI queries. Each of of the types of queries run can be found by filtering on the `test` column.
+The analyst for this report populated the information in this dynamic documents with a variety of GEMINI queries. 
 
 **FAQ**:
 
