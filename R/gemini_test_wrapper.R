@@ -1,4 +1,4 @@
-#' GEMINI query wrapper
+#' GEMINI test (sub command) wrapper
 #' 
 #' Calls GEMINI's built in tools (e.g. autosomal_dominant, comp_hets) to retrieve proband/trio specific variants. Returns a tibble of all of the columns available in your GEMINI database. 
 #' 
@@ -17,7 +17,7 @@
 #' @export
 #' 
 #' @examples
-#' gemini_caller('/path/to/your/gemini.db', 'autosomal_dominant', families = 'fam007')
+#' gemini_test_caller('/path/to/your/gemini.db', 'autosomal_dominant', families = 'fam007')
 
 
 gemini_test_caller <- function(gemini_db, 
