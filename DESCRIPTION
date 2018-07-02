@@ -1,4 +1,4 @@
-Package: SeeGem
+Package: SeeGEM
 Version: 0.01
-Depends: R (>= 3.4.0), readr, dplyr, data.table
+Depends: R (>= 3.4.0), readr, dplyr, data.table, rmarkdown, magrittr, stringr
 RoxygenNote: 6.0.1
