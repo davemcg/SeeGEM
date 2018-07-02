@@ -13,6 +13,8 @@
 #' 
 #' @return None
 #' 
+#' @export
+#' 
 #' @examples
 #' gemini_caller('/path/to/your/gemini.db', 'autosomal_dominant', families = 'fam007')
 
