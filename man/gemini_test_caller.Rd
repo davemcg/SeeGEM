@@ -2,7 +2,7 @@
 % Please edit documentation in R/gemini_test_wrapper.R
 \name{gemini_test_caller}
 \alias{gemini_test_caller}
-\title{GEMINI query wrapper}
+\title{GEMINI test (sub command) wrapper}
 \usage{
 gemini_test_caller(gemini_db, test = "autosomal_recessive",
   filter = "aaf < 0.1 AND aaf_esp_all < 0.01 AND \\n                        aaf_1kg_all < 0.01 AND af_exac_all < 0.01 AND \\n                        (is_coding=1 OR is_splicing=1 OR impact_severity='HIGH') \\n                        AND filter is NULL",
@@ -31,5 +31,5 @@ None
 Calls GEMINI's built in tools (e.g. autosomal_dominant, comp_hets) to retrieve proband/trio specific variants. Returns a tibble of all of the columns available in your GEMINI database.
 }
 \examples{
-gemini_caller('/path/to/your/gemini.db', 'autosomal_dominant', families = 'fam007')
+gemini_test_caller('/path/to/your/gemini.db', 'autosomal_dominant', families = 'fam007')
 }
