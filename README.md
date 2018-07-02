@@ -1,9 +1,13 @@
 R library which takes output from [GEMINI](http://gemini.readthedocs.io) and wraps into a interactive html document. 
 
+# Wait, what?
+
+Right click [here](inst/extdata/demo.html) and select 'download source' for a sample file. 
+
 # Who would use this R library?
 The bioinformatician who is running (scripted) GEMINI queries and would like to share results with someone who isn't going to run custom GEMINI queries for their samples. 
 
-# Why not just use [insert web service]
+# Why not just use [insert web service]?
 You don't have to hook into a web page which may disappear in `x` months/years. 
 
 This also has the huge advantage of being fully portable - you just send the html document to the user and they can use their web browser to study the exome/NGS results for a sample/trio. 
