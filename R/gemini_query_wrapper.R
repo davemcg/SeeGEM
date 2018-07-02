@@ -3,7 +3,7 @@
 #' A barebones GEMINI wrapper which passes on your GEMINI command to `gemini query 
 #' --header -q` on the command line. I imagine this will mostly be used for users 
 #' with already functional `gemini query --header -q` commands. You \strong{must} 
-#' escape (append \) your quote marks and other special characters. 
+#' escape (append \) your quote marks.
 #' 
 #' @param gemini_db is the name of your GEMINI database (with path, if necessary)
 #' @param output By default the data frame will be returned. If you give path/name.tsv
@@ -17,17 +17,16 @@
 #' @export
 #' 
 #' @examples
-#' gemini_query_caller('/path/to/your/gemini.db', "\"SELECT * FROM variants WHERE \(aaf_esp_all < 0.01 AND IMPACT_SO LIKE '%STOP%'\) LIMIT 20\"")
+#' gemini_query_wrapper('/path/to/your/gemini.db', ... = "\"SELECT * FROM variants WHERE (aaf_esp_all < 0.01 AND IMPACT_SO LIKE '%STOP%' AND filter is NULL) LIMIT 20\"")
 
 
-gemini_query_caller <- function(gemini_db, test_name="CUSTOM1", output = NA, ...){
+gemini_query_wrapper <- function(gemini_db, test_name="CUSTOM1", output = NA, ...){
   
   tmp_file <- paste0('/tmp/gem', sample(1e6:2e6,1))
 
   gemini_query <- paste("gemini query --header -q", 
                         ...,
                         gemini_db, ">", tmp_file)
-  
   system(gemini_query)
   input <- readr::read_tsv(tmp_file)
   # force chromosomes as characters, to avoid issues with X, Y
