@@ -5,8 +5,9 @@
 \title{GEMINI data formatter}
 \usage{
 See_GEM_formatter(GEMINI_data, core_fields = c("test", "pos_id", "gene",
-  "transcript", "hgvsc", "hgvsp", "aaf", "gno_af_all", "exac_num_hom_alt",
-  "clinvar_id", "rs_ids", "Google Scholar"), linkify = "yes")
+  "impact_so", "hgvsc", "hgvsp", "aaf", "gno_af_all", "exac_num_hom_alt",
+  "clinvar_id", "rs_ids", "GoogleScholar"), linkify = "yes",
+  underscore_to_space = "yes")
 }
 \arguments{
 \item{GEMINI_data}{The data frame / tibble of your GEMINI data. All tests 
@@ -17,6 +18,8 @@ with the GEMINI sub command test given in a `test` column.}
 
 \item{linkify}{Do you want to turn format fields as hyperlinks? Hard-coded to 
 position id (gnomAD), gene (OMIM), ClinVar ID (ClinVar), rs_id (dbSNP).}
+
+\item{underscore_to_space}{Do you want to replace underscores with spaces?}
 }
 \value{
 None
