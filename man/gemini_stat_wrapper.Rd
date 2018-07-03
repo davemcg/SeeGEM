@@ -11,7 +11,9 @@ gemini_stat_wrapper(gemini_db, ID, is_family = "yes")
 
 \item{ID}{is the family name or sample name to pull stats from}
 
-\item{is_family}{Defaults to `yes`. If this is a sample name, change to 'no'}
+\item{is_family}{Defaults to `yes`. The GEMINI databases's ped will be pulled 
+to find the sample names associated with the family_id. If this is a sample 
+name, change to 'no'.}
 }
 \value{
 None
