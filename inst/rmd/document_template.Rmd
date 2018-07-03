@@ -149,7 +149,7 @@ sex_check %>%
 
 ```{r}
 ped_check %>% 
-  filter(sample_a %in% peddy_sample_id, sample_b %in% peddy_id) %>% 
+  filter(sample_a %in% peddy_id, sample_b %in% peddy_id) %>% 
   select('Sample 1' = sample_a,
          'Sample 2' = sample_b, 
          ibs0,
