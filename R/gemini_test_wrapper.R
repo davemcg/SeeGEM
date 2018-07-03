@@ -31,7 +31,7 @@ gemini_test_wrapper <- function(gemini_db,
                           ...){
   
   if (!test %in% c('autosomal_dominant','autosomal_recessive','comp_hets',
-                   'mendel_errors','x_linked_de_novo','x_linked_dominant',
+                   'de_novo','mendel_errors','x_linked_de_novo','x_linked_dominant',
                    'x_linked_recessive')){
     stop('Not an allowed GEMINI sub command!')
   }
