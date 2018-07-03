@@ -2,11 +2,13 @@
 % Please edit documentation in R/knit_see_gem.R
 \name{knit_see_gem}
 \alias{knit_see_gem}
-\title{Knit SeeGEM}
+\title{Knit SeeGEM with peddy stats}
 \usage{
 knit_see_gem(rmd = system.file("rmd/document_template.Rmd", package =
   "SeeGEM"), output_file = "SeeGEM_document.html",
-  GEMINI_data = system.file("extdata/GEMINI_data.Rdata", package = "SeeGEM"))
+  GEMINI_data = system.file("extdata/GEMINI_data.Rdata", package = "SeeGEM"),
+  peddy_path_prefix = paste0(system.file("extdata/", package = "SeeGEM"),
+  "SEE_GEM_PEDDY"), peddy_id = c("1045", "1046", "1265"))
 }
 \arguments{
 \item{rmd}{Path to a custom R markdown file. A default R markdown file is 
@@ -16,6 +18,8 @@ provided with this package.}
 of the GEMINI output that will be plotted. Helper scripts are provided as 
 \code{\link{gemini_test_wrapper}} and \code{\link{gemini_query_wrapper}} 
 which will return the GEMINI output as a data frame into your R session.}
+
+\item{peddy_stats}{Path and prefix for the peddy output}
 }
 \value{
 None
