@@ -3,6 +3,7 @@ args = commandArgs(trailingOnly=TRUE)
 
 gemini_db <- args[1]
 family_name <- args[2]
+output_df <- args[3]
 
 library(data.table)
 
@@ -100,5 +101,5 @@ GEMINI_list$acmg <- gemini_query_wrapper(gemini_db,
 # gemini_query_wrapper() and gemini_test_wrapper() will add the test name
 # to each query, so you can distinguish them later
 GEMINI_data <- rbindlist(GEMINI_list)
-save(GEMINI_data, file='~/GEMINI_data.Rdata')
+save(GEMINI_data, file=output_df)
 
