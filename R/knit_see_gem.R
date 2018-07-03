@@ -18,12 +18,15 @@ knit_see_gem <- function(rmd = system.file("rmd/document_template.Rmd", package=
                          output_file = 'SeeGEM_document.html',
                          GEMINI_data = system.file("extdata/GEMINI_data.Rdata", package="SeeGEM"),
                          peddy_path_prefix = paste0(system.file("extdata/", package="SeeGEM"), "SEE_GEM_PEDDY"),
-                         peddy_id = c('1045', '1046', '1265')){
+                         peddy_id = c('1045', '1046', '1265'),
+                         sample_name = 'BLANK',
+                         title = "SeeGEM Test Report"){
+  
   rmarkdown::render(system.file("rmd/document_template.Rmd", package="SeeGEM"),
                     output_file = output_file,
                     params = list(GEMINI_data_frame = GEMINI_data,
-                                  sample_name = "Sample 007",
-                                  title = "SeeGEM Test Report",
+                                  sample_name = sample_name,
+                                  title = title,
                                   peddy_id = peddy_id,
                                   peddy_path_prefix = peddy_path_prefix))
   
