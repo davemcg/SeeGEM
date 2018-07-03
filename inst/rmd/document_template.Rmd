@@ -23,8 +23,10 @@ knitr::opts_chunk$set(echo = F,
 ```
 
 ```{r, include = FALSE}
-# load in data to be displayed
-load(params$GEMINI_data_frame)
+# if data given as character, assume it's a path to an Rdata file
+if (is.character(params$GEMINI_data_frame)){
+  load(params$GEMINI_data_frame)
+}
 document_data <- See_GEM_formatter(GEMINI_data)
 ```
 
@@ -34,6 +36,7 @@ document_data <- See_GEM_formatter(GEMINI_data)
 #round off values <1 or >1000
 
 ```
+
 ### Variation
 ```{r}
 
