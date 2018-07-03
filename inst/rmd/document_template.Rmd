@@ -10,7 +10,7 @@ params:
     value: NA
   peddy_path_prefix:
     value: NA
-  sample_peddy_id:
+  peddy_id:
     value: NA
   sample_name:
     value: FILL_IN
@@ -35,9 +35,9 @@ document_data <- See_GEM_formatter(GEMINI_data)
 ```
 
 
-## `r params$sample_name` {.tabset}
+# `r params$sample_name` {.tabset}
 
-### GEMINI Variation
+## GEMINI Variation
 ```{r}
 
 DT::datatable(document_data$GEMINI_data %>% mutate_if(is.numeric, funs(as.numeric(formatC(., format = "e", digits = 2)))), #width=1200, 
@@ -61,36 +61,127 @@ DT::datatable(document_data$GEMINI_data %>% mutate_if(is.numeric, funs(as.numeri
 
 ```
 
-### peddy QC
+## peddy QC
 
 ```{r, include = FALSE}
 # load peddy data
-ped_check <- read_csv(paste0(params$peddy_path_prefix), "/ped_check.csv")
-het_check <- read_csv(paste0(params$peddy_path_prefix), "/het_check.csv")
-sex_check <- read_csv(paste0(params$peddy_path_prefix), "/sex_check.csv")
+ped_check <- readr::read_csv(paste0(params$peddy_path_prefix, ".ped_check.csv"))
+het_check <- readr::read_csv(paste0(params$peddy_path_prefix, ".het_check.csv"))
+sex_check <- readr::read_csv(paste0(params$peddy_path_prefix, ".sex_check.csv"))
+peddy_id <- params$peddy_id
+
+het_processor <- function(df, stat_to_filter){
+  df %>% gather(stat, value, -c(sample_id)) %>% 
+    filter(stat == stat_to_filter) %>% 
+    mutate(value=as.numeric(value))
+}
+het_data <- het_processor(het_check, 'het_ratio')
+median_data <- het_processor(het_check, 'median_depth')
+idr_baf_data <- het_processor(het_check, 'idr_baf')
 ```
 
-peddy Heterozygousity Check
+### [peddy](http://peddy.readthedocs.io) Heterozygousity Check
 
-mean/median_depth: mean/median depths for the sites tested.
+- Median Read Depth: Median depths for the sites tested.
+- Het Ratio: proportion of sites that were heterozygous.
+- IDR BAF: inter-decile range (90th percentile - 10th percentile) of b-allele frequency. Large values indicate likely sample contamination.
 
-het_ratio: proportion of sites that were heterozygous.
+```{r}
+het_ratio <- het_data %>% 
+  ggplot(aes(x=stat, y=value)) + 
+  geom_quasirandom(color = 'gray', alpha=0.7) + 
+  geom_quasirandom(data = het_data %>% filter(sample_id %in% peddy_id), 
+                   aes(x=stat,y=value, colour=sample_id)) +
+  theme_minimal() +
+  xlab('') + ylab('') + ggtitle('Het Ratio') + theme( axis.text.x=element_blank(), axis.ticks.x=element_blank())
 
-idr_baf: inter-decile range (90th percentile - 10th percentile) of b-allele frequency. We make a distribution of all sites of alts / (ref + alts) and then report the difference between the 90th and the 10th percentile. Large values indicated likely sample contamination.
+median_depth <- median_data %>% 
+  ggplot(aes(x=stat, y=value)) +
+  geom_quasirandom(color = 'gray', alpha=0.7) + 
+  geom_quasirandom(data = median_data %>% filter(sample_id %in% peddy_id), 
+                   aes(x=stat,y=value, colour=sample_id)) +
+  theme_minimal() +
+  xlab('') + ylab('') + ggtitle('Median Read Depth') + theme( axis.text.x=element_blank(), axis.ticks.x=element_blank())
 
-peddy Pedigree Check
+idr_baf <- idr_baf_data %>% 
+  ggplot(aes(x=stat, y=value)) + 
+  geom_quasirandom(color = 'gray', alpha=0.7) + 
+  geom_quasirandom(data = idr_baf_data %>% filter(sample_id %in% peddy_id), 
+                   aes(x=stat,y=value, colour=sample_id)) +
+  theme_minimal() + 
+  xlab('') + ylab('') + ggtitle('IDR BAF') + theme( axis.text.x=element_blank(), axis.ticks.x=element_blank())
 
-rel: the relatedness calculated from the genotypes.
+legend <- cowplot::get_legend(idr_baf+ theme(legend.position="right"))
+cowplot::plot_grid(median_depth + theme(legend.position="none"),
+                   NULL,
+                   het_ratio + theme(legend.position="none"), 
+                   NULL,
+                   idr_baf + theme(legend.position="none"), 
+                   NULL,
+                   legend,
+                   rel_widths = c(1,0.1,1,0.1,1,0.1,0.4),
+                   scale=0.9,
+                   nrow=1) 
+```
 
-ibs0: the number of sites at which the 2 samples shared no alleles (should approach 0 for parent-child pairs).
-ibs2: the number of sites and which the 2 samples where both hom-ref, both het, or both hom-alt.
+### [peddy](http://peddy.readthedocs.io) Sex Check
 
-peddy Sex Check
+- ped Sex: Sex from .ped file
+- Predicted Sex: Sex predicted from rate of heterozygotes on chrX
+- Error: Deviation between given and predicted sex
 
-ped_sex: sex from .ped file
-predicted_sex: sex predicted from rate of hets on chrX.
 
-### Info
+```{r}
+sex_check %>% 
+  filter(sample_id %in% peddy_id) %>% 
+  select('Sample ID' = sample_id, 'Pedigree Sex' = ped_sex, 'Predicted Sex' = predicted_sex, 'Error' = error) %>% 
+  DT::datatable(rownames = F, 
+                class='compact',  
+                extensions = c('Buttons'),
+                options = list(dom = 'Bfrtip',
+                               buttons = list(list(extend='pageLength'))))
+```
+
+### [peddy](http://peddy.readthedocs.io) Pedigree Check
+
+- Relatedness: the relatedness calculated from the genotypes.
+- IBS2 against IBS0: IBS0 is the number of sites where the two samples shared no alleles (~0 for parent-child) and IBS2 is where the two samples were both homozygous reference, heterozygous, or homozyous alternative. This should be fairly high between related individuals. An intermediate IBS0 suggests first cousin or second cousin. 
+
+```{r}
+ped_check %>% 
+  filter(sample_a %in% peddy_sample_id, sample_b %in% peddy_id) %>% 
+  select('Sample 1' = sample_a,
+         'Sample 2' = sample_b, 
+         ibs0,
+         ibs2,
+         'Pedigree Parents' = pedigree_parents,
+         'Predicted Parents' = predicted_parents,
+         'Parent Error' = parent_error) %>% 
+  DT::datatable(rownames = F, 
+                class='compact',  
+                extensions = c('Buttons'),
+                options = list(dom = 'Bfrtip',
+                               buttons = list(list(extend='pageLength'))))
+```
+
+```{r}
+ped_check %>% 
+  ggplot(aes(x=ibs0, y=ibs2)) + 
+  geom_point(aes(x=ibs0, y=ibs2), color='gray', alpha=0.7) + 
+  geom_jitter(data = ped_check %>% 
+                filter(sample_a %in% peddy_sample_id, sample_b %in% peddy_id) %>% 
+                mutate('Sample - Sample' = paste0(sample_a, ' - ', sample_b)),
+              aes(x=ibs0, y=ibs2, colour = `Sample - Sample`)) +
+  geom_text_repel(data = ped_check %>% 
+                    filter(sample_a %in% peddy_sample_id, sample_b %in% peddy_id) %>% 
+                    mutate('Sample - Sample' = paste0(sample_a, ' - ', sample_b)),
+                  aes(x=ibs0, y=ibs2, label = `Sample - Sample`, colour = `Sample - Sample`),
+                  box.padding = 1) + 
+  theme_minimal() + 
+  theme(legend.position="none")
+```
+
+## Info
 
 This report is auto-generated with the [See GEM](https://github.com/davemcg/See_GEM) R package on `r strftime(Sys.time(), format = "%B %d, %Y")`
 
