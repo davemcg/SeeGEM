@@ -1,4 +1,4 @@
 Package: SeeGEM
 Version: 0.01
-Depends: R (>= 3.4.0), readr, dplyr, tidyr, data.table, rmarkdown, magrittr, stringr, ggbeeswarm, ggplot2
+Depends: R (>= 3.4.0), readr, dplyr, tidyr, data.table, rmarkdown, magrittr, stringr, ggbeeswarm, ggplot2, cowplot, ggrepel
 RoxygenNote: 6.0.1
