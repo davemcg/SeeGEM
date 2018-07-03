@@ -8,7 +8,7 @@ output:
 params:
   GEMINI_data_frame:
     value: NA
-  stats:
+  GEMINI_stats:
     value: NA
   sample_name:
     value: FILL_IN
@@ -25,17 +25,15 @@ knitr::opts_chunk$set(echo = F,
 ```{r, include = FALSE}
 # if data given as character, assume it's a path to an Rdata file
 if (is.character(params$GEMINI_data_frame)){
-  load(params$GEMINI_data_frame)
+  gdf <- load(params$GEMINI_data_frame)
+  GEMINI_data <- get(gdf)
+  rm(gdf)
 }
 document_data <- See_GEM_formatter(GEMINI_data)
 ```
 
 
 ## `r params$sample_name` {.tabset}
-```{r, include = FALSE}
-#round off values <1 or >1000
-
-```
 
 ### Variation
 ```{r}
@@ -63,19 +61,27 @@ DT::datatable(document_data$GEMINI_data %>% mutate_if(is.numeric, funs(as.numeri
 
 ### Statistics
 
-Yes, this is blank right now.
+```{r, include = FALSE}
+# load
+# if data given as character, assume it's a path to an Rdata file
+if (is.character(params$GEMINI_stats)){
+  gstats <- load(params$GEMINI_stats)
+  GEMINI_stats <- get(gstats)
+  rm(gstats)
+}
+```
 
-The plan is to add some bare-bones metrics (e.g. number of SNPs, INDELs, ts/tv) that 
-`gemini stats` provides for the sample.
-
-The idea is to provide enough information for the analyst to sound the alarm for 
-QC-failing samples. 
-
-Potentially [peddy](http://peddy.readthedocs.io/en/latest/) csv output could be 
-re-plotted here. 
+Counts by genotype class
 ```{r}
-
-
+GEMINI_stats$gemini_stats %>% 
+  gather(stat, value, -sample) %>% 
+  filter(stat != 'total') %>% 
+  ggplot(aes(x=stat,y=value)) + 
+  geom_quasirandom(color='gray', alpha=0.7) + 
+  theme_minimal() + 
+  geom_point(data = GEMINI_stats$gemini_stats %>% 
+  gather(stat, value, -sample) %>% 
+    filter(sample %in% GEMINI_stats$ID, stat != 'total'), aes(x=stat,y=value, color=sample))
 ```
 
 ### Info
@@ -87,7 +93,7 @@ The analyst for this report populated the information in this dynamic documents 
 **FAQ**:
 
 * What does it mean if a variant is marked in red (CURRENTLY NOT IMPLEMENTED)?
-* This means that the variant has an impact severity of ['HIGH'](http://gemini.readthedocs.io/en/latest/content/database_schema.html#details-of-the-impact-and-impact-severity-columns) **or** is marked as pathogenic in ClinVar **and** has a population allele frequency less than 10%. 
+* This means that the variant has an impact severity of [HIGH](http://gemini.readthedocs.io/en/latest/content/database_schema.html#details-of-the-impact-and-impact-severity-columns) **or** is marked as pathogenic in ClinVar **and** has a population allele frequency less than 10%. 
 
 **WARNINGS/LIMITATIONS** 
 
