@@ -7,14 +7,19 @@ body {
   margin-left: 0cm; !important;
 }
 
+body .main-container {
+margin-left: 1px; !important;
+}
+
+
+
+table.dataTable tbody tr.selected {
+    color: #fcfcfa !important;
+    background-color: #fcfcfa !important;
+}
 
 div.main-container { 
   max-width: inherit; 
   margin-left: 0cm; !important;
   
-}
-
-table.dataTable tbody tr.selected {
-    color: #fcfcfa !important;
-    background-color: #fcfcfa !important;
 }
