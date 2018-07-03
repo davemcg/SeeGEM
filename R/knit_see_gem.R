@@ -1,4 +1,4 @@
-#' Knit SeeGEM 
+#' Knit SeeGEM with peddy stats
 #' 
 #' Create the interactive html document
 #' 
@@ -8,8 +8,7 @@
 #' of the GEMINI output that will be plotted. Helper scripts are provided as 
 #' \code{\link{gemini_test_wrapper}} and \code{\link{gemini_query_wrapper}} 
 #' which will return the GEMINI output as a data frame into your R session. 
-#' @param GEMINI_stats Path to .Rdata list which has the output from 
-#' \code{\link{gemini_stat_wrapper}}
+#' @param peddy_stats Path and prefix for the peddy output
 #' 
 #' @return None
 #' 
@@ -18,12 +17,14 @@
 knit_see_gem <- function(rmd = system.file("rmd/document_template.Rmd", package="SeeGEM"),
                          output_file = 'SeeGEM_document.html',
                          GEMINI_data = system.file("extdata/GEMINI_data.Rdata", package="SeeGEM"),
-                         GEMINI_stats = '~/Desktop/w.Rdata'){
+                         peddy_path_prefix = paste0(system.file("extdata/", package="SeeGEM"), "SEE_GEM_PEDDY"),
+                         peddy_id = c('1045', '1046', '1265')){
   rmarkdown::render(system.file("rmd/document_template.Rmd", package="SeeGEM"),
                     output_file = output_file,
                     params = list(GEMINI_data_frame = GEMINI_data,
                                   sample_name = "Sample 007",
                                   title = "SeeGEM Test Report",
-                                  GEMINI_stats = GEMINI_stats))
+                                  peddy_id = peddy_id,
+                                  peddy_path_prefix = peddy_path_prefix))
   
 }
