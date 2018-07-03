@@ -6,6 +6,7 @@ family_name <- args[2]
 output_df <- args[3]
 
 library(data.table)
+library(SeeGEM)
 
 GEMINI_list <- list()
 GEMINI_list$ar <- gemini_test_wrapper(gemini_db, 
