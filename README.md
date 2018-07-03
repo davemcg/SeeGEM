@@ -19,7 +19,7 @@ Well, that's actually what I have been doing for a few years. The analysts are n
 It also has custom selectable columns and filtering options to quickly do some basic searches (highest CADD, lowest cohort AF, etc.). These are fiddly to do in Excel. 
 
 # Wow this sounds amazing, I want to use this right now!
-You can run `devtools::install_git('git://github.com/davemcg/see_gem.git')` and read the documentation. Be warned - this is pre-alpha software. 
+You can run `devtools::install_github('davemcg/see_gem')` and read the documentation. Be warned - this is pre-alpha software. 
 
 Contact me or do a pull request if you have questions, features, or ideas. Or bugs. 
 
