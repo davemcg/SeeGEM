@@ -169,11 +169,11 @@ ped_check %>%
   ggplot(aes(x=ibs0, y=ibs2)) + 
   geom_point(aes(x=ibs0, y=ibs2), color='gray', alpha=0.7) + 
   geom_jitter(data = ped_check %>% 
-                filter(sample_a %in% peddy_sample_id, sample_b %in% peddy_id) %>% 
+                filter(sample_a %in% peddy_id, sample_b %in% peddy_id) %>% 
                 mutate('Sample - Sample' = paste0(sample_a, ' - ', sample_b)),
               aes(x=ibs0, y=ibs2, colour = `Sample - Sample`)) +
   geom_text_repel(data = ped_check %>% 
-                    filter(sample_a %in% peddy_sample_id, sample_b %in% peddy_id) %>% 
+                    filter(sample_a %in% peddy_id, sample_b %in% peddy_id) %>% 
                     mutate('Sample - Sample' = paste0(sample_a, ' - ', sample_b)),
                   aes(x=ibs0, y=ibs2, label = `Sample - Sample`, colour = `Sample - Sample`),
                   box.padding = 1) + 
