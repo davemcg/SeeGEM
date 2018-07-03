@@ -8,6 +8,8 @@
 #' of the GEMINI output that will be plotted. Helper scripts are provided as 
 #' \code{\link{gemini_test_wrapper}} and \code{\link{gemini_query_wrapper}} 
 #' which will return the GEMINI output as a data frame into your R session. 
+#' @param GEMINI_stats Path to .Rdata list which has the output from 
+#' \code{\link{gemini_stat_wrapper}}
 #' 
 #' @return None
 #' 
@@ -15,11 +17,13 @@
 
 knit_see_gem <- function(rmd = system.file("rmd/document_template.Rmd", package="SeeGEM"),
                          output_file = 'SeeGEM_document.html',
-                         GEMINI_data = system.file("extdata/GEMINI_data.Rdata", package="SeeGEM")){
+                         GEMINI_data = system.file("extdata/GEMINI_data.Rdata", package="SeeGEM"),
+                         GEMINI_stats = '~/Desktop/w.Rdata'){
   rmarkdown::render(system.file("rmd/document_template.Rmd", package="SeeGEM"),
                     output_file = output_file,
                     params = list(GEMINI_data_frame = GEMINI_data,
                                   sample_name = "Sample 007",
-                                  title = "SeeGEM Test Report"))
+                                  title = "SeeGEM Test Report",
+                                  GEMINI_stats = GEMINI_stats))
   
 }
