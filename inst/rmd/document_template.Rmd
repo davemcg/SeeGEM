@@ -8,7 +8,9 @@ output:
 params:
   GEMINI_data_frame:
     value: NA
-  GEMINI_stats:
+  peddy_path_prefix:
+    value: NA
+  sample_peddy_id:
     value: NA
   sample_name:
     value: FILL_IN
@@ -35,7 +37,7 @@ document_data <- See_GEM_formatter(GEMINI_data)
 
 ## `r params$sample_name` {.tabset}
 
-### Variation
+### GEMINI Variation
 ```{r}
 
 DT::datatable(document_data$GEMINI_data %>% mutate_if(is.numeric, funs(as.numeric(formatC(., format = "e", digits = 2)))), #width=1200, 
@@ -59,30 +61,34 @@ DT::datatable(document_data$GEMINI_data %>% mutate_if(is.numeric, funs(as.numeri
 
 ```
 
-### Statistics
+### peddy QC
 
 ```{r, include = FALSE}
-# load
-# if data given as character, assume it's a path to an Rdata file
-if (is.character(params$GEMINI_stats)){
-  gstats <- load(params$GEMINI_stats)
-  GEMINI_stats <- get(gstats)
-  rm(gstats)
-}
+# load peddy data
+ped_check <- read_csv(paste0(params$peddy_path_prefix), "/ped_check.csv")
+het_check <- read_csv(paste0(params$peddy_path_prefix), "/het_check.csv")
+sex_check <- read_csv(paste0(params$peddy_path_prefix), "/sex_check.csv")
 ```
 
-Counts by genotype class
-```{r}
-GEMINI_stats$gemini_stats %>% 
-  gather(stat, value, -sample) %>% 
-  filter(stat != 'total') %>% 
-  ggplot(aes(x=stat,y=value)) + 
-  geom_quasirandom(color='gray', alpha=0.7) + 
-  theme_minimal() + 
-  geom_point(data = GEMINI_stats$gemini_stats %>% 
-  gather(stat, value, -sample) %>% 
-    filter(sample %in% GEMINI_stats$ID, stat != 'total'), aes(x=stat,y=value, color=sample))
-```
+peddy Heterozygousity Check
+
+mean/median_depth: mean/median depths for the sites tested.
+
+het_ratio: proportion of sites that were heterozygous.
+
+idr_baf: inter-decile range (90th percentile - 10th percentile) of b-allele frequency. We make a distribution of all sites of alts / (ref + alts) and then report the difference between the 90th and the 10th percentile. Large values indicated likely sample contamination.
+
+peddy Pedigree Check
+
+rel: the relatedness calculated from the genotypes.
+
+ibs0: the number of sites at which the 2 samples shared no alleles (should approach 0 for parent-child pairs).
+ibs2: the number of sites and which the 2 samples where both hom-ref, both het, or both hom-alt.
+
+peddy Sex Check
+
+ped_sex: sex from .ped file
+predicted_sex: sex predicted from rate of hets on chrX.
 
 ### Info
 
