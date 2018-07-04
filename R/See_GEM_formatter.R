@@ -28,12 +28,9 @@ See_GEM_formatter <- function(GEMINI_data,
                               underscore_to_space = 'yes'){
   # add color labeling
   GEMINI_data <- GEMINI_data %>% 
-    mutate(Color = case_when(impact_so == 'synonymous_variant' ~ 1,
+    mutate(Color = case_when(impact_severity == 'MED' ~ 1,
                              impact_severity=='HIGH' | ((grepl('pathog', clinvar_sig)) & as.numeric(gno_af_all) < 0.01) ~ 2,
                              TRUE ~ 0))
-  
-  
-  
   
   #load('inst/extdata/gemini.Rdata')
   #GEMINI_data <- data.table::rbindlist(x) %>% data.frame()
