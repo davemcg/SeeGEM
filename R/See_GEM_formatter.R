@@ -28,10 +28,10 @@ See_GEM_formatter <- function(GEMINI_data,
                               underscore_to_space = 'yes'){
   # add Deleterious label for DT
   if ('impact_severity' %in% colnames(GEMINI_data) & 'clinvar_sig' %in% colnames(GEMINI_data) & 'gno_af_all' %in% colnames(GEMINI_data)){
-    GEMINI_data <- GEMINI_data %>% mutate(Mark1 = ifelse((impact_severity=='HIGH' | grepl('pathog', clinvar_sig)) & as.numeric(gno_af_all) < 0.01, 1, 0))
-  } else {GEMINI_data$Mark1 = 0}
+    GEMINI_data <- GEMINI_data %>% mutate(Red = ifelse((impact_severity=='HIGH' | grepl('pathog', clinvar_sig)) & as.numeric(gno_af_all) < 0.01, 1, 0))
+  } else {GEMINI_data$Red = 0}
   # synonymous
-  GEMINI_data <- GEMINI_data %>% mutate(Mark2 = case_when(impact_so == 'synonymous_variant' ~ 1,
+  GEMINI_data <- GEMINI_data %>% mutate(Green = case_when(impact_so == 'synonymous_variant' ~ 1,
                                                           TRUE ~ 0))
   
   
