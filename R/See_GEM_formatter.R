@@ -93,7 +93,7 @@ See_GEM_formatter <- function(GEMINI_data,
   neg_core_index <- setdiff(all_cols, core_index)
   
   # add Deleterious label for DT
-  if ((impact_severity & clinvar_sig & max_aaf_all) %in% colnames(GEMINI_data)){
+  if (('impact_severity' & 'clinvar_sig' & 'max_aaf_all') %in% colnames(GEMINI_data)){
     GEMINI_data <- GEMINI_data %>% mutate(DeleteriousMark = ifelse((impact_severity=='HIGH' | grepl('pathog', clinvar_sig)) & as.numeric(max_aaf_all) < 0.1, 'Candidate', NA))
   } else {GEMINI_data$DeleteriousMark = NA}
   
