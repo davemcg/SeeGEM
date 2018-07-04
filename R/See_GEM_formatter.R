@@ -26,6 +26,14 @@ See_GEM_formatter <- function(GEMINI_data,
                                               "GoogleScholar"),
                               linkify = 'yes',
                               underscore_to_space = 'yes'){
+  # add Deleterious label for DT
+  if ('impact_severity' %in% colnames(GEMINI_data) & 'clinvar_sig' %in% colnames(GEMINI_data) & 'gno_af_all' %in% colnames(GEMINI_data)){
+    GEMINI_data <- GEMINI_data %>% mutate(Mark1 = ifelse((impact_severity=='HIGH' | grepl('pathog', clinvar_sig)) & as.numeric(gno_af_all) < 0.01, 'Candidate', NA))
+  } else {GEMINI_data$Mark1 = NA}
+  # synonymous
+  GEMINI_data <- GEMINI_data %>% mutate(Mark2 = case_when(impact_so == 'synonymous_variant' ~ 'Candidate',
+                                                          TRUE ~ NA_character_))
+  
   
   #load('inst/extdata/gemini.Rdata')
   #GEMINI_data <- data.table::rbindlist(x) %>% data.frame()
@@ -77,14 +85,7 @@ See_GEM_formatter <- function(GEMINI_data,
                                function(x) link_generator('https://www.omim.org/search/?search=', x))
   }
   
-  # add Deleterious label for DT
-  if ('impact_severity' %in% colnames(GEMINI_data) & 'clinvar_sig' %in% colnames(GEMINI_data) & 'gno_af_all' %in% colnames(GEMINI_data)){
-    GEMINI_data <- GEMINI_data %>% mutate(Mark1 = ifelse((impact_severity=='HIGH' | grepl('pathog', clinvar_sig)) & as.numeric(gno_af_all) < 0.01, 'Candidate', NA))
-  } else {GEMINI_data$Mark1 = NA}
-  # synonymous
-  GEMINI_data <- GEMINI_data %>% mutate(Mark2 = case_when(impact_so == 'synonymous_variant' ~ 'Candidate',
-                                                          TRUE ~ NA_character_))
-  
+
   # indices of all columns
   all_cols <- seq(1,ncol(GEMINI_data))
   # indices of core_fields
