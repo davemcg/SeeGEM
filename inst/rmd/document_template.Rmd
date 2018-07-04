@@ -190,9 +190,11 @@ The analyst for this report populated the information in this dynamic documents 
 
 **FAQ**:
 
-* What does it mean if a variant is marked in red (CURRENTLY NOT IMPLEMENTED)?
+* What does it mean if a variant is marked in red?
 * This means that the variant has an impact severity of [HIGH](http://gemini.readthedocs.io/en/latest/content/database_schema.html#details-of-the-impact-and-impact-severity-columns) **or** is marked as pathogenic in ClinVar **and** has a population allele frequency less than 10%. 
 
 **WARNINGS/LIMITATIONS** 
 
+* This document is only a tool to aid identification of causative variant(s)
+* The causative variants may not be present in this document
 
