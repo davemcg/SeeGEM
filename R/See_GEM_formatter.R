@@ -25,8 +25,8 @@ See_GEM_formatter <- function(GEMINI_data,
                                               "exac_num_hom_alt", "clinvar_id", "rs_ids", 
                                               "GoogleScholar"),
                               linkify = 'yes',
-                              underscore_to_space = 'yes'
-){
+                              underscore_to_space = 'yes'){
+  
   #load('inst/extdata/gemini.Rdata')
   #GEMINI_data <- data.table::rbindlist(x) %>% data.frame()
   # replace all underscores with a space
@@ -97,10 +97,10 @@ See_GEM_formatter <- function(GEMINI_data,
     GEMINI_data <- GEMINI_data %>% mutate(DeleteriousMark = ifelse((impact_severity=='HIGH' | grepl('pathog', clinvar_sig)) & as.numeric(max_aaf_all) < 0.1, 'Candidate', NA))
   } else {GEMINI_data$DeleteriousMark = NA}
   
-out <- list()
-out$GEMINI_data <- data.frame(GEMINI_data)
-out$all_cols <- all_cols
-out$core_index <- core_index
-out$neg_core_index <- neg_core_index
-out
+  out <- list()
+  out$GEMINI_data <- data.frame(GEMINI_data)
+  out$all_cols <- all_cols
+  out$core_index <- core_index
+  out$neg_core_index <- neg_core_index
+  out
 }
