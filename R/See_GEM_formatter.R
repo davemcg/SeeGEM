@@ -26,13 +26,13 @@ See_GEM_formatter <- function(GEMINI_data,
                                               "GoogleScholar"),
                               linkify = 'yes',
                               underscore_to_space = 'yes'){
-  # add Deleterious label for DT
-  if ('impact_severity' %in% colnames(GEMINI_data) & 'clinvar_sig' %in% colnames(GEMINI_data) & 'gno_af_all' %in% colnames(GEMINI_data)){
-    GEMINI_data <- GEMINI_data %>% mutate(Red = ifelse((impact_severity=='HIGH' | grepl('pathog', clinvar_sig)) & as.numeric(gno_af_all) < 0.01, 1, 0))
-  } else {GEMINI_data$Red = 0}
-  # synonymous
-  GEMINI_data <- GEMINI_data %>% mutate(Green = case_when(impact_so == 'synonymous_variant' ~ 1,
-                                                          TRUE ~ 0))
+  # add color labeling
+  GEMINI_data <- GEMINI_data %>% 
+    mutate(Green = case_when(impact_so == 'synonymous_variant' ~ 1,
+                             impact_severity=='HIGH' | ((grepl('pathog', clinvar_sig)) & as.numeric(gno_af_all) < 0.01) ~ 2,
+                             TRUE ~ 0))
+  
+  
   
   
   #load('inst/extdata/gemini.Rdata')
@@ -85,7 +85,7 @@ See_GEM_formatter <- function(GEMINI_data,
                                function(x) link_generator('https://www.omim.org/search/?search=', x))
   }
   
-
+  
   # indices of all columns
   all_cols <- seq(1,ncol(GEMINI_data))
   # indices of core_fields
