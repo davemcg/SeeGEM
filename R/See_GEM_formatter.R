@@ -83,7 +83,7 @@ See_GEM_formatter <- function(GEMINI_data,
   } else {GEMINI_data$Mark1 = NA}
   # synonymous
   GEMINI_data <- GEMINI_data %>% mutate(Mark2 = case_when(impact_so == 'synonymous_variant' ~ 'Candidate',
-                                                          TRUE ~ NA))
+                                                          TRUE ~ NA_character_))
   
   # indices of all columns
   all_cols <- seq(1,ncol(GEMINI_data))
