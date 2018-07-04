@@ -78,10 +78,12 @@ See_GEM_formatter <- function(GEMINI_data,
   }
   
   # add Deleterious label for DT
-  if ('impact_severity' %in% colnames(GEMINI_data) & 'clinvar_sig' %in% colnames(GEMINI_data) & 'max_aaf_all' %in% colnames(GEMINI_data)){
-    GEMINI_data <- GEMINI_data %>% mutate(DeleteriousMark = ifelse((impact_severity=='HIGH' | grepl('pathog', clinvar_sig)) & as.numeric(max_aaf_all) < 0.1, 'Candidate', NA))
-  } else {GEMINI_data$DeleteriousMark = NA}
-  
+  if ('impact_severity' %in% colnames(GEMINI_data) & 'clinvar_sig' %in% colnames(GEMINI_data) & 'gno_af_all' %in% colnames(GEMINI_data)){
+    GEMINI_data <- GEMINI_data %>% mutate(Mark1 = ifelse((impact_severity=='HIGH' | grepl('pathog', clinvar_sig)) & as.numeric(gno_af_all) < 0.01, 'Candidate', NA))
+  } else {GEMINI_data$Mark1 = NA}
+  # synonymous
+  GEMINI_data <- GEMINI_data %>% mutate(Mark2 = case_when(impact_so == 'synonymous_variant' ~ 'Candidate',
+                                                          TRUE ~ NA))
   
   # indices of all columns
   all_cols <- seq(1,ncol(GEMINI_data))
@@ -90,7 +92,6 @@ See_GEM_formatter <- function(GEMINI_data,
   # indices of not core_fields
   neg_core_index <- setdiff(all_cols, core_index)
   
-
   # reorder to match core_field order
   GEMINI_data <- data.frame(GEMINI_data)
   GEMINI_data <- GEMINI_data[,c(core_index, neg_core_index)]
@@ -98,8 +99,7 @@ See_GEM_formatter <- function(GEMINI_data,
   core_index <- match(core_fields, colnames(GEMINI_data))
   neg_core_index <- setdiff(all_cols, core_index)
   
- 
-  
+  # build output
   out <- list()
   out$GEMINI_data <- data.frame(GEMINI_data)
   out$all_cols <- all_cols
