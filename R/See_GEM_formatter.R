@@ -9,6 +9,7 @@
 #' @param linkify Do you want to turn format fields as hyperlinks? Hard-coded to 
 #' position id (gnomAD), gene (OMIM), ClinVar ID (ClinVar), rs_id (dbSNP).
 #' @param underscore_to_space Do you want to replace underscores with spaces?
+#' 
 #' @return None
 #' 
 #' @export
@@ -19,19 +20,19 @@
 #' See_GEM_formatter(GEMINI_data)
 
 See_GEM_formatter <- function(GEMINI_data, 
-                      core_fields = c("test", "pos_id", "gene", "impact_so",
-                                      "hgvsc", "hgvsp", "aaf", "gno_af_all", 
-                                      "exac_num_hom_alt", "clinvar_id", "rs_ids", 
-                                      "GoogleScholar"),
-                      linkify = 'yes',
-                      underscore_to_space = 'yes'
-                      ){
+                              core_fields = c("test", "pos_id", "gene", "impact_so",
+                                              "hgvsc", "hgvsp", "aaf", "gno_af_all", 
+                                              "exac_num_hom_alt", "clinvar_id", "rs_ids", 
+                                              "GoogleScholar"),
+                              linkify = 'yes',
+                              underscore_to_space = 'yes'
+){
   #load('inst/extdata/gemini.Rdata')
   #GEMINI_data <- data.table::rbindlist(x) %>% data.frame()
   # replace all underscores with a space
   if (underscore_to_space == 'yes'){
-  GEMINI_data <- GEMINI_data %>% mutate_if(is.character, stringr::str_replace_all, pattern = '_', replacement = ' ') %>% 
-    mutate_if(is.factor, stringr::str_replace_all, pattern = '_', replacement = ' ')
+    GEMINI_data <- GEMINI_data %>% mutate_if(is.character, stringr::str_replace_all, pattern = '_', replacement = ' ') %>% 
+      mutate_if(is.factor, stringr::str_replace_all, pattern = '_', replacement = ' ')
   }
   
   # set test column as factor
@@ -60,22 +61,22 @@ See_GEM_formatter <- function(GEMINI_data,
   # linkify
   if (linkify == 'yes'){
     GEMINI_data$pos_id <- sapply(GEMINI_data$pos_id, 
-                                function(x) link_generator('http://gnomad.broadinstitute.org/variant/', x))
+                                 function(x) link_generator('http://gnomad.broadinstitute.org/variant/', x))
     GEMINI_data$clinvar_id <- apply(GEMINI_data, 1, 
-                                   function(x) link_generator('https://www.ncbi.nlm.nih.gov/clinvar?term=', 
-                                                              ID = x['clinvar_id'], 
-                                                              link_name = x['clinvar_sig'], 
-                                                              split_on = '\\|'))
+                                    function(x) link_generator('https://www.ncbi.nlm.nih.gov/clinvar?term=', 
+                                                               ID = x['clinvar_id'], 
+                                                               link_name = x['clinvar_sig'], 
+                                                               split_on = '\\|'))
     GEMINI_data$rs_ids <- sapply(GEMINI_data$rs_ids, 
-                               function(x) link_generator('https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=', x))
+                                 function(x) link_generator('https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=', x))
     GEMINI_data$GoogleScholar <- apply(GEMINI_data, 1, 
-                                         function(x) link_generator('https://scholar.google.com/scholar?hl=en&q=', 
-                                                                    paste0(strsplit(gsub('>', '%3E',x['hgvsc']), ':')[[1]][2],'%20', x['gene']), 
-                                                                    link_name = 'Feeling lucky?'))
+                                       function(x) link_generator('https://scholar.google.com/scholar?hl=en&q=', 
+                                                                  paste0(strsplit(gsub('>', '%3E',x['hgvsc']), ':')[[1]][2],'%20', x['gene']), 
+                                                                  link_name = 'Feeling lucky?'))
     GEMINI_data$gene <- sapply(GEMINI_data$gene, 
-                              function(x) link_generator('https://www.omim.org/search/?search=', x))
+                               function(x) link_generator('https://www.omim.org/search/?search=', x))
   }
-
+  
   
   # indices of all columns
   all_cols <- seq(1,ncol(GEMINI_data))
@@ -83,19 +84,23 @@ See_GEM_formatter <- function(GEMINI_data,
   core_index <- match(core_fields, colnames(GEMINI_data))
   # indices of not core_fields
   neg_core_index <- setdiff(all_cols, core_index)
-
+  
   # reorder to match core_field order
   GEMINI_data <- data.frame(GEMINI_data)
   GEMINI_data <- GEMINI_data[,c(core_index, neg_core_index)]
-
+  
   core_index <- match(core_fields, colnames(GEMINI_data))
   neg_core_index <- setdiff(all_cols, core_index)
   
-
-  out <- list()
-  out$GEMINI_data <- data.frame(GEMINI_data)
-  out$all_cols <- all_cols
-  out$core_index <- core_index
-  out$neg_core_index <- neg_core_index
-  out
+  # add Deleterious label for DT
+  if ((impact_severity & clinvar_sig & max_aaf_all) %in% colnames(GEMINI_data)){
+    GEMINI_data <- GEMINI_data %>% mutate(DeleteriousMark = ifelse((impact_severity=='HIGH' | grepl('pathog', clinvar_sig)) & as.numeric(max_aaf_all) < 0.1, 'Candidate', NA))
+  } else {GEMINI_data$DeleteriousMark = NA}
+  
+out <- list()
+out$GEMINI_data <- data.frame(GEMINI_data)
+out$all_cols <- all_cols
+out$core_index <- core_index
+out$neg_core_index <- neg_core_index
+out
 }

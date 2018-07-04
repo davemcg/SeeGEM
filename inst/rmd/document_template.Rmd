@@ -57,7 +57,8 @@ DT::datatable(document_data$GEMINI_data %>% mutate_if(is.numeric, funs(as.numeri
                                                  hide=paste(document_data$neg_core_index-1, collapse = ','), 
                                                  show = paste(document_data$core_index-1, collapse = ',')),
                                             list(extend='colvisGroup', text='Show All', show = ':hidden' )),
-                             columnDefs=list(list(targets=c(1), class="dt-left")))) 
+                             columnDefs=list(list(targets=c(1), class="dt-left")))) %>% 
+  DT::formatStyle(columns = c('DeleteriousMark'), target = 'row', backgroundColor = DT::styleEqual(c(NA, 'Candidate'), c('#fcfcfa', '#ffd3d3')))
 
 ```
 
