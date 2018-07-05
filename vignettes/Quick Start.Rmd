@@ -1,0 +1,58 @@
+---
+title: "SeeGEM Quick Start"
+author: "David McGaughey"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+%\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  ---
+  
+  ```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+collapse = TRUE,
+comment = "#>"
+)
+```
+
+## Quick Start
+The SeeGEM package contains the information used to create the 
+[demo file](https://cdn.rawgit.com/davemcg/see_gem/master/inst/extdata/demo.html?raw=True)
+
+Before you get started with your own data, I suggest you recreate this document
+to make sure you have all of the libraries and pandoc installed on your computer.
+
+```{r}
+knit_see_gem()
+```
+
+This should create `SeeGEM_document.html` in your base user directory (`~/`)
+
+OK, let's try to use your own data. You will need the following:
+
+1. GEMINI installed (e.g. if you go to your bash shell and type `gemini` it will run (with an error about `too few arguments`)
+2. A GEMINI database
+
+You can use the \code{\link{gemini_test_wrapper}} or \code{\link{gemini_query_wrapper}} functions to call
+`gemini` from R and pull the data into the \code{\link{knit_see_gem}} function. 
+
+It is much simpler to use the \code{\link{gemini_test_wrapper}} since it has pre-filled out
+sensible default filters (see the documentation). You just need need to feed \code{\link{gemini_test_wrapper}}
+the GEMINI database ('2018_06_28__OGVFB_exomes.GATK.PED_master.gemini.db'), the
+test you want to run ('autosomal_recessive'), finally the family that you want
+to return the results from ('DDL003').
+
+Then give the path and name of the output file and tell \code{\link{knit_see_gem}}
+to use the use the no stats template with `skip_stats = 'no'`
+
+```{r}
+knit_see_gem(GEMINI_data = gemini_test_wrapper('2018_06_28__OGVFB_exomes.GATK.PED_master.gemini.db', 
+                                               test = 'autosomal_recessive', 
+                                               families = 'DDL003'), 
+             output_file='~/quick_SeeGEM.html', 
+             skip_stats = 'yes')
+```
+
+Depending on the speed of the GEMINI query, this can create the document in seconds, potentially
+making it possible to use SeeGEM in an exploratory manner. 
