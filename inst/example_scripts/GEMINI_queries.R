@@ -9,8 +9,8 @@ peddy_path <- args[4]
 
 library(SeeGEM)
 
-print('\n\n\n\n\n')
-print('Starting GEMINI queries')
+writeLines('\n\n\n\n\n')
+writeLines('Starting GEMINI queries')
 
 GEMINI_list <- list()
 GEMINI_list$ar <- gemini_test_wrapper(gemini_db, 
@@ -21,7 +21,7 @@ GEMINI_list$ar <- gemini_test_wrapper(gemini_db,
                     (is_coding=1 OR is_splicing=1 OR impact_severity='HIGH') 
                     AND filter IS NULL",
                                       families = family_name)
-print('Autosomal Recessive test done')
+writeLines('Autosomal Recessive test done')
 GEMINI_list$ad <- gemini_test_wrapper(gemini_db, 
                                       test = 'autosomal_dominant', 
                                       min_gq = 20, 
@@ -30,7 +30,7 @@ GEMINI_list$ad <- gemini_test_wrapper(gemini_db,
                                       (is_coding=1 OR is_splicing=1 OR impact_severity='HIGH') 
                                       AND filter IS NULL",
                                       families = family_name)
-print('Autosomal Dominant test done')
+writeLines('Autosomal Dominant test done')
 GEMINI_list$dn <- gemini_test_wrapper(gemini_db, 
                                       test = 'de_novo', 
                                       min_gq = 20, 
@@ -39,7 +39,7 @@ GEMINI_list$dn <- gemini_test_wrapper(gemini_db,
                                       (is_coding=1 OR is_splicing=1 OR impact_severity='HIGH') 
                                       AND filter IS NULL",
                                       families = family_name)
-print('De novo test done')
+writeLines('De novo test done')
 GEMINI_list$xlr <- gemini_test_wrapper(gemini_db, 
                                        test = 'x_linked_recessive', 
                                        min_gq = 20, 
@@ -48,7 +48,7 @@ GEMINI_list$xlr <- gemini_test_wrapper(gemini_db,
                                        (is_coding=1 OR is_splicing=1 OR impact_severity='HIGH') 
                                        AND filter IS NULL",
                                        families = family_name)
-print('XLR test done')
+writeLines('XLR test done')
 GEMINI_list$xld <- gemini_test_wrapper(gemini_db, 
                                        test = 'x_linked_dominant', 
                                        min_gq = 20, 
@@ -57,7 +57,7 @@ GEMINI_list$xld <- gemini_test_wrapper(gemini_db,
                                        (is_coding=1 OR is_splicing=1 OR impact_severity='HIGH') 
                                        AND filter IS NULL",
                                        families = family_name)
-print('XLD test done')
+writeLines('XLD test done')
 GEMINI_list$xldn <- gemini_test_wrapper(gemini_db, 
                                         test = 'x_linked_de_novo', 
                                         min_gq = 20, 
@@ -66,7 +66,7 @@ GEMINI_list$xldn <- gemini_test_wrapper(gemini_db,
                                        (is_coding=1 OR is_splicing=1 OR impact_severity='HIGH') 
                                        AND filter IS NULL",
                                         families = family_name)
-print('XL De Novo test done')
+writeLines('XL De Novo test done')
 GEMINI_list$me <- gemini_test_wrapper(gemini_db, 
                                       test = 'mendel_errors', 
                                       min_gq = 20, 
@@ -75,7 +75,7 @@ GEMINI_list$me <- gemini_test_wrapper(gemini_db,
                                         (is_coding=1 OR is_splicing=1 OR impact_severity='HIGH') 
                                         AND filter IS NULL",
                                       families = family_name)
-print('Mendelian Errors test done')
+writeLines('Mendelian Errors test done')
 GEMINI_list$ch <- gemini_test_wrapper(gemini_db, 
                                       test = 'comp_hets', 
                                       min_gq = 20, 
@@ -84,7 +84,7 @@ GEMINI_list$ch <- gemini_test_wrapper(gemini_db,
                                       (is_coding=1 OR is_splicing=1 OR impact_severity='HIGH') 
                                       AND filter IS NULL",
                                       families = family_name)
-print('Compound Hets test done')
+writeLines('Compound Hets test done')
 acmg_genes = c('ACTA2','ACTC1','APC','APOB','ATP7B','BMPR1A','BRCA1','BRCA2',
                'CACNA1S','COL3A1','DSC2','DSG2','DSP','FBN1','GLA','KCNH2','KCNQ1',
                'LDLR','LMNA','MEN1','MLH1','MSH2','MSH6','MUTYH','MYBPC3','MYH11',
@@ -92,7 +92,7 @@ acmg_genes = c('ACTA2','ACTC1','APC','APOB','ATP7B','BMPR1A','BRCA1','BRCA2',
                'PTEN','RB1','RET','RYR1','RYR2','SCN5A','SDHAF2','SDHB','SDHC',
                'SDHD','SMAD3','SMAD4','STK11','TGFBR1','TGFBR2','TMEM43','TNNI3',
                'TNNT2','TP53','TPM1','TSC1','TSC2','VHL','WT1')
-print('ACMG test done')
+writeLines('ACMG test done')
 GEMINI_list$acmg <- gemini_query_wrapper(gemini_db,
                                          ... = paste0("\"SELECT * FROM variants WHERE (gene IN (\'",
                                                       paste(acmg_genes, collapse="\',\'"),
@@ -117,7 +117,7 @@ my_GEMINI_data <- rbindlist(GEMINI_list, fill = TRUE)
 # this is fairly simple with a GEMINI query
 sample_ped <- gemini_query_wrapper(gemini_db,
                                    ... = paste0("\"SELECT * FROM samples WHERE family_id == '",
-                                   family_name, "' \""))
+                                                family_name, "' \""))
 
 knit_see_gem(GEMINI_data = my_GEMINI_data, 
              output_file = output_html, 
