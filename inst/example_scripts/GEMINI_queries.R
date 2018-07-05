@@ -9,6 +9,9 @@ peddy_path <- args[4]
 
 library(SeeGEM)
 
+print('\n\n\n\n\n')
+print('Starting GEMINI queries')
+
 GEMINI_list <- list()
 GEMINI_list$ar <- gemini_test_wrapper(gemini_db, 
                                       test = 'autosomal_recessive', 
