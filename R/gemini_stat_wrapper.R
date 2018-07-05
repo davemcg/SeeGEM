@@ -12,8 +12,6 @@
 #' 
 #' @return None
 #'
-#' @export
-#'
 #' @examples
 #' gemini_stat_wrapper('/path/to/gemini.db', 'Sample007', is_family = 'no')
 
