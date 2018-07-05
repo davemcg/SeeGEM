@@ -6,6 +6,9 @@
 #' (e.g. autosomal_recessive, compound_het) collapsed into a single data frame 
 #' with the GEMINI sub command test given in a `test` column. 
 #' @param core_fields These are the columns that will be shown by default
+#' @param in_silico These are in silico consequence columns (e.g CADD, SIFT)
+#' @param genotypes These show the full genotype information for each person
+#' in the family.
 #' @param linkify Do you want to turn format fields as hyperlinks? Hard-coded to 
 #' position id (gnomAD), gene (OMIM), ClinVar ID (ClinVar), rs_id (dbSNP).
 #' @param underscore_to_space Do you want to replace underscores with spaces?
@@ -24,8 +27,15 @@ See_GEM_formatter <- function(GEMINI_data,
                                               "hgvsc", "hgvsp", "aaf", "gno_af_all", 
                                               "exac_num_hom_alt", "clinvar_id", "rs_ids", 
                                               "GoogleScholar"),
+                              in_silico = c("test", "pos_id", "gene", "impact_so", 
+                                            "cadd_phred", "ccr_pct_v1", "revel", 
+                                            "polyphen_score", "sift_score", 
+                                            "metalr_rankscore", "genesplicer", 
+                                            "spliceregion","linsight"),
+                              genotypes = c("test", "pos_id", "gene", "impact_so"),
                               linkify = 'yes',
-                              underscore_to_space = 'yes'){
+                              underscore_to_space = 'yes',
+                              cut_down){
   # add color labeling
   GEMINI_data <- GEMINI_data %>% 
     mutate(Color = case_when(impact_severity == 'MED' ~ 1,
