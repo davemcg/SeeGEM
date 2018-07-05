@@ -23,7 +23,7 @@ knit_see_gem <- function(rmd = system.file("rmd/document_template.Rmd", package=
                          sample_name = 'BLANK',
                          title = "SeeGEM Test Report"){
   
-  if (skip_stats != 'no'){
+  if (skip_stats == 'no'){
     rmarkdown::render(system.file("rmd/document_template.Rmd", package="SeeGEM"),
                       output_file = output_file,
                       params = list(GEMINI_data_frame = GEMINI_data,
