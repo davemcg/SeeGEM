@@ -1,0 +1,125 @@
+---
+date: '`r strftime(Sys.time(), format = "%B %d, %Y")`'
+title: '`r params$title`'
+output: 
+  html_document:
+    theme: flatly
+params:
+  GEMINI_data_frame:
+    value: NA
+  peddy_path_prefix:
+    value: NA
+  peddy_id:
+    value: NA
+  sample_name:
+    value: FILL_IN
+  title:
+    value: SampleReport
+  table_width:
+    value: 1500
+---
+
+```{r Set parameter loading, include = FALSE}
+opts_chunk$set(echo = F,
+               warning = F,
+               message = F)
+```
+
+<style type="text/css">
+.main-container {
+max-width: `r params$table_width`px; !important;
+margin-left: auto;
+margin-right: auto;
+}
+</style>
+
+```{r Load and format GEMINI data, include = FALSE}
+# if data given as character, assume it's a path to an Rdata file
+if (is.character(params$GEMINI_data_frame)){
+  gdf <- load(params$GEMINI_data_frame)
+  GEMINI_data <- get(gdf)
+  rm(gdf)
+}
+document_data <- See_GEM_formatter(GEMINI_data)
+```
+
+# `r params$sample_name` {.tabset}
+
+## GEMINI Variation
+```{r Print GEMINI DataTable}
+DT::datatable(document_data$GEMINI_data, 
+              width = params$table_width, 
+              escape = FALSE,
+              rownames = F, 
+              class='compact', 
+              filter='bottom',
+              extensions = c('Buttons','FixedHeader', 'ColReorder'),
+              options = list(columnDefs=list(list(targets=document_data$neg_core_index-1, visible = FALSE)),
+                             pageLength = 15,
+                             scrollX = TRUE,
+                             fixedHeader = TRUE,
+                             colReorder = TRUE,
+                             lengthMenu = list(c(5, 15, 30, 60, 100, -1), list('5', '15', '30', '60', '100', 'All')),
+                             dom = 'Bfrtip',
+                             buttons = list(list(extend = 'pageLength'),
+                                            list(extend = 'colvis', collectionLayout='four-column'),
+                                            list(extend = 'colvisGroup', text='Core Fields', 
+                                                 hide = paste(document_data$neg_core_index-1, collapse = ','), 
+                                                 show = paste(document_data$core_index-1, collapse = ',')),
+                                            list(extend = 'colvisGroup', text='Family Genotypes', 
+                                                 hide = paste(document_data$neg_genotypes-1, collapse = ','), 
+                                                 show = paste(document_data$genotypes-1, collapse = ',')),
+                                            list(extend = 'colvisGroup', text='In Silico Fields', 
+                                                 hide = paste(document_data$neg_in_silico_index-1, collapse = ','), 
+                                                 show = paste(document_data$in_silico_index-1, collapse = ',')),
+                                            list(extend='colvisGroup', text='Show All', show = ':hidden' )))) %>% 
+  DT::formatStyle(columns = c('Color'), target = 'row', backgroundColor = DT::styleEqual(c(0, 1, 2), c('#ffffff', '#fff0dd', '#ffdddd'))) 
+
+
+```
+
+## peddy QC
+
+A small selection of outputs from the [peddy](http://peddy.readthedocs.io) tool. 
+
+For the plots, gray are all of the samples available in the vcf that [peddy](http://peddy.readthedocs.io)
+was run on. The colored points are samples in the family analyzed in this document. 
+
+```{r Load peddy data, include = FALSE}
+# load peddy data
+ped_check <- fread(paste0(params$peddy_path_prefix, ".ped_check.csv"))
+het_check <- fread(paste0(params$peddy_path_prefix, ".het_check.csv"))
+sex_check <- fread(paste0(params$peddy_path_prefix, ".sex_check.csv"))
+peddy_id <- params$peddy_id
+
+het_processor <- function(df, stat_to_filter){
+  df %>% gather(stat, value, -c(sample_id)) %>% 
+    filter(stat == stat_to_filter) %>% 
+    mutate(value=as.numeric(value))
+}
+het_data <- het_processor(het_check, 'het_ratio')
+median_data <- het_processor(het_check, 'median_depth')
+idr_baf_data <- het_processor(het_check, 'idr_baf')
+```
+
+## Info
+
+This report is auto-generated with the [See GEM](https://github.com/davemcg/See_GEM) R package on `r strftime(Sys.time(), format = "%B %d, %Y")`
+
+The analyst for this report populated the information in this dynamic documents with a variety of GEMINI queries. 
+
+**FAQ**:
+
+- What does it mean if a variant is marked in red?
+- This means that the variant has an impact severity of [HIGH](http://gemini.readthedocs.io/en/latest/content/database_schema.html#details-of-the-impact-and-impact-severity-columns) **or** is marked as pathogenic in ClinVar **and** has a gnomAD population allele frequency less than 1%. 
+- Orange?
+- [MED](http://gemini.readthedocs.io/en/latest/content/database_schema.html#details-of-the-impact-and-impact-severity-columns) impact severity
+
+
+**WARNINGS/LIMITATIONS** 
+
+- This document is only a tool to aid identification of causative variant(s)
+- The *in silico* consequences (e.g. stop gained, synonymous) are automatically 
+calculated, and for a variety of reasons, may not be accurate.
+- The causative variants may not be present in this document
+
