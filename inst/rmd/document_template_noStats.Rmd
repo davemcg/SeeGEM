@@ -78,30 +78,6 @@ DT::datatable(document_data$GEMINI_data,
 
 ```
 
-## peddy QC
-
-A small selection of outputs from the [peddy](http://peddy.readthedocs.io) tool. 
-
-For the plots, gray are all of the samples available in the vcf that [peddy](http://peddy.readthedocs.io)
-was run on. The colored points are samples in the family analyzed in this document. 
-
-```{r Load peddy data, include = FALSE}
-# load peddy data
-ped_check <- fread(paste0(params$peddy_path_prefix, ".ped_check.csv"))
-het_check <- fread(paste0(params$peddy_path_prefix, ".het_check.csv"))
-sex_check <- fread(paste0(params$peddy_path_prefix, ".sex_check.csv"))
-peddy_id <- params$peddy_id
-
-het_processor <- function(df, stat_to_filter){
-  df %>% gather(stat, value, -c(sample_id)) %>% 
-    filter(stat == stat_to_filter) %>% 
-    mutate(value=as.numeric(value))
-}
-het_data <- het_processor(het_check, 'het_ratio')
-median_data <- het_processor(het_check, 'median_depth')
-idr_baf_data <- het_processor(het_check, 'idr_baf')
-```
-
 ## Info
 
 This report is auto-generated with the [See GEM](https://github.com/davemcg/See_GEM) R package on `r strftime(Sys.time(), format = "%B %d, %Y")`
