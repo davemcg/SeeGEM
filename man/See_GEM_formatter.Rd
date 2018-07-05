@@ -4,10 +4,15 @@
 \alias{See_GEM_formatter}
 \title{GEMINI data formatter}
 \usage{
-See_GEM_formatter(GEMINI_data, core_fields = c("test", "pos_id", "gene",
-  "impact_so", "hgvsc", "hgvsp", "aaf", "gno_af_all", "exac_num_hom_alt",
-  "clinvar_id", "rs_ids", "GoogleScholar"), linkify = "yes",
-  underscore_to_space = "yes")
+See_GEM_formatter(GEMINI_data, core_fields = c("test", "pos_id", "impact_so",
+  "gene", "hgvsc", "hgvsp", "aaf", "gno_af_all", "exac_num_hom_alt",
+  "clinvar_id", "rs_ids", "GoogleScholar"), in_silico = c("test", "pos_id",
+  "gene", "impact_so", "cadd_phred", "ccr_pct_v1", "revel", "polyphen_score",
+  "sift_score", "metalr_rankscore", "genesplicer", "spliceregion", "linsight"),
+  genotypes = c("test", "pos_id", "gene", "impact_so", "family_members",
+  "family_genotypes"),
+  extra_columns_to_retain = "^gno|rankscore$|*num*|^clin|*domain*|*codon*",
+  linkify = "yes", underscore_to_space = "yes", cut_down)
 }
 \arguments{
 \item{GEMINI_data}{The data frame / tibble of your GEMINI data. All tests 
@@ -15,6 +20,16 @@ See_GEM_formatter(GEMINI_data, core_fields = c("test", "pos_id", "gene",
 with the GEMINI sub command test given in a `test` column.}
 
 \item{core_fields}{These are the columns that will be shown by default}
+
+\item{in_silico}{These are in silico consequence columns (e.g CADD, SIFT)}
+
+\item{genotypes}{These columns show the full genotype information for each person
+in the family.}
+
+\item{extra_columns_to_retain}{These are columns not selected above that will be 
+retained. This is a regular expression, so you can give this something like 
+'^gno|rankscore$|*num*' and all columns starting with `gno` or ending with `rankscore`
+or containing `num` will be selected.}
 
 \item{linkify}{Do you want to turn format fields as hyperlinks? Hard-coded to 
 position id (gnomAD), gene (OMIM), ClinVar ID (ClinVar), rs_id (dbSNP).}
@@ -25,7 +40,7 @@ position id (gnomAD), gene (OMIM), ClinVar ID (ClinVar), rs_id (dbSNP).}
 None
 }
 \description{
-Formats data for reactive knit document
+Formats data for reactive knit document made with \code{\link{knit_see_gem}}
 }
 \examples{
 GEMINI_data <- data.table::rbindlist(gemini_caller('/path/to/gemini.db', 'autosomal_recessive'),
