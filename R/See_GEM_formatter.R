@@ -128,6 +128,11 @@ See_GEM_formatter <- function(GEMINI_data,
   genotypes_index <- match(genotypes, colnames(GEMINI_data))
   neg_genotypes_index <- setdiff(all_cols, genotypes_index)
 
+  # round numeric nums down
+  GEMINI_data <- GEMINI_data %>% 
+    mutate_if(is.numeric, funs(ifelse(is.na(.), -1, .))) %>% 
+    mutate_if(is.numeric, funs(as.numeric(formatC(., format = "e", digits = 2))))
+  
   # build output
   out <- list()
   out$GEMINI_data <- data.frame(GEMINI_data)

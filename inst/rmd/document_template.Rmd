@@ -47,7 +47,7 @@ document_data <- See_GEM_formatter(GEMINI_data)
 
 ## GEMINI Variation
 ```{r Print GEMINI DataTable}
-DT::datatable(document_data$GEMINI_data %>% mutate_if(is.numeric, funs(as.numeric(formatC(., format = "e", digits = 2)))), 
+DT::datatable(document_data$GEMINI_data, 
               width = params$table_width, 
               escape = FALSE,
               rownames = F, 
