@@ -84,9 +84,9 @@ idr_baf_data <- het_processor(het_check, 'idr_baf')
 
 ### [peddy](http://peddy.readthedocs.io) Heterozygousity Check
 
-- Median Read Depth: Median depths for the sites tested.
-- Het Ratio: proportion of sites that were heterozygous.
-- IDR BAF: inter-decile range (90th percentile - 10th percentile) of b-allele frequency. Large values indicate likely sample contamination.
+  - Median Read Depth: Median depths for the sites tested.
+  - Het Ratio: proportion of sites that were heterozygous.
+  - IDR BAF: inter-decile range (90th percentile - 10th percentile) of b-allele frequency. Large values indicate likely sample contamination.
 
 ```{r}
 het_ratio <- het_data %>% 
@@ -94,7 +94,7 @@ het_ratio <- het_data %>%
   geom_quasirandom(color = 'gray', alpha=0.7) + 
   geom_quasirandom(data = het_data %>% filter(sample_id %in% peddy_id), 
                    aes(x=stat,y=value, colour=sample_id)) +
-  theme_minimal() +
+  theme_minimal() + 
   xlab('') + ylab('') + ggtitle('Het Ratio') + theme( axis.text.x=element_blank(), axis.ticks.x=element_blank())
 
 median_depth <- median_data %>% 
@@ -128,9 +128,9 @@ cowplot::plot_grid(median_depth + theme(legend.position="none"),
 
 ### [peddy](http://peddy.readthedocs.io) Sex Check
 
-- ped Sex: Sex from .ped file
-- Predicted Sex: Sex predicted from rate of heterozygotes on chrX
-- Error: Deviation between given and predicted sex
+  - ped Sex: Sex from .ped file
+  - Predicted Sex: Sex predicted from rate of heterozygotes on chrX
+  - Error: Deviation between given and predicted sex
 
 
 ```{r}
@@ -146,8 +146,8 @@ sex_check %>%
 
 ### [peddy](http://peddy.readthedocs.io) Pedigree Check
 
-- Relatedness: the relatedness calculated from the genotypes.
-- IBS2 against IBS0: IBS0 is the number of sites where the two samples shared no alleles (~0 for parent-child) and IBS2 is where the two samples were both homozygous reference, heterozygous, or homozyous alternative. This should be fairly high between related individuals. An intermediate IBS0 suggests first cousin or second cousin. 
+  - Relatedness: the relatedness calculated from the genotypes.
+  - IBS2 against IBS0: IBS0 is the number of sites where the two samples shared no alleles (~0 for parent-child) and IBS2 is where the two samples were both homozygous reference, heterozygous, or homozyous alternative. This should be fairly high between related individuals. An intermediate IBS0 suggests first cousin or second cousin. 
 
 ```{r}
 ped_check %>% 
@@ -191,11 +191,16 @@ The analyst for this report populated the information in this dynamic documents 
 
 **FAQ**:
 
-* What does it mean if a variant is marked in red?
-* This means that the variant has an impact severity of [HIGH](http://gemini.readthedocs.io/en/latest/content/database_schema.html#details-of-the-impact-and-impact-severity-columns) **or** is marked as pathogenic in ClinVar **and** has a population allele frequency less than 10%. 
+  - What does it mean if a variant is marked in red?
+  - This means that the variant has an impact severity of [HIGH](http://gemini.readthedocs.io/en/latest/content/database_schema.html#details-of-the-impact-and-impact-severity-columns) **or** is marked as pathogenic in ClinVar **and** has a gnomAD population allele frequency less than 1%. 
+  - Orange?
+  - [MED](http://gemini.readthedocs.io/en/latest/content/database_schema.html#details-of-the-impact-and-impact-severity-columns) impact severity
+
 
 **WARNINGS/LIMITATIONS** 
 
-* This document is only a tool to aid identification of causative variant(s)
-* The causative variants may not be present in this document
+  - This document is only a tool to aid identification of causative variant(s)
+  - The *in silico* consequences (e.g. stop gained, synonymous) are automatically 
+calculated, and for a variety of reasons, may not be accurate.
+  - The causative variants may not be present in this document
 
