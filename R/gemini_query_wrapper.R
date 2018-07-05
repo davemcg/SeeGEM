@@ -30,7 +30,7 @@ gemini_query_wrapper <- function(gemini_db, test_name="CUSTOM1", output = NA, ..
   system(gemini_query)
   input <- readr::read_tsv(tmp_file)
   # force chromosomes as characters, to avoid issues with X, Y
-  if (nrow(input)>0){
+  if (nrow(input)>0 & 'chrom' %in% colnames(input)){
     input$chrom <- as.character(input$chrom)
     # also set test name
     input$test <- test_name
