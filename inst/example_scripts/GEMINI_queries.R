@@ -3,9 +3,10 @@ args = commandArgs(trailingOnly=TRUE)
 
 gemini_db <- args[1]
 family_name <- args[2]
-output_df <- args[3]
+output_html <- args[3]
+peddy_path <- args[4]
 
-library(data.table)
+
 library(SeeGEM)
 
 GEMINI_list <- list()
@@ -102,6 +103,26 @@ GEMINI_list$acmg <- gemini_query_wrapper(gemini_db,
 # rbindlist will collapse each element of the list into one data frame
 # gemini_query_wrapper() and gemini_test_wrapper() will add the test name
 # to each query, so you can distinguish them later
-GEMINI_data <- rbindlist(GEMINI_list, fill = TRUE)
-save(GEMINI_data, file=output_df)
+my_GEMINI_data <- rbindlist(GEMINI_list, fill = TRUE)
+
+# now that you've created the core data, you can create the reactive document
+# I'm assuming you've already run peddy on the same vcf you used to make the GEMINI
+# db. 
+
+# one wrinkle is that peddy doesn't give the family labels throughout the output,
+# rather it uses the sample ids. So we need to get them.
+# this is fairly simple with a GEMINI query
+sample_ped <- gemini_query_wrapper(gemini_db,
+                                   ... = paste0("\"SELECT * FROM samples WHERE family_id == '",
+                                   family_name, "' \""))
+
+knit_see_gem(GEMINI_data = my_GEMINI_data, 
+             output_file = output_html, 
+             peddy_path_prefix = peddy_path, 
+             peddy_id = sample_ped$name, 
+             sample_name = family_id)
+
+
+
+
 
