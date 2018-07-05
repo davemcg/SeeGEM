@@ -1,6 +1,6 @@
 Package: SeeGEM
-Version: 0.01
-Depends: R (>= 3.4.0), readr, dplyr, tidyr, data.table, rmarkdown, magrittr, stringr, ggbeeswarm, ggplot2, cowplot, ggrepel, DT, knitr
+Version: 0.0.1
+Depends: R (>= 3.4.0), dplyr, tidyr, data.table, rmarkdown, magrittr, stringr, ggbeeswarm, ggplot2, cowplot, ggrepel, DT, knitr
 RoxygenNote: 6.0.1
 Suggests: knitr,
     rmarkdown
