@@ -51,7 +51,9 @@ gemini_test_wrapper <- function(gemini_db,
                           gemini_db, ">", tmp_file)
   }
   system(gemini_query)
-  input <- fread(tmp_file)
+  # if no output from gemini, return empty tibble
+  input <- tryCatch(fread(tmp_file), error = function(e) tibble())
+  input <- as.tibble(input)
   # force chromosomes as characters, to avoid issues with X, Y
   if (nrow(input)>0){
     input$chrom <- as.character(input$chrom)
