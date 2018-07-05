@@ -120,7 +120,7 @@ knit_see_gem(GEMINI_data = my_GEMINI_data,
              output_file = output_html, 
              peddy_path_prefix = peddy_path, 
              peddy_id = sample_ped$name, 
-             sample_name = family_id)
+             sample_name = family_name)
 
 
 
