@@ -153,7 +153,6 @@ cowplot::plot_grid(median_depth + theme(legend.position="none"),
 - Predicted Sex: Sex predicted from rate of heterozygotes on chrX
 - Error: Deviation between given and predicted sex
 
-
 ```{r}
 sex_check %>% 
   filter(sample_id %in% peddy_id) %>% 
@@ -176,6 +175,7 @@ ped_check %>%
   filter(sample_a %in% peddy_id, sample_b %in% peddy_id) %>% 
   select('Sample 1' = sample_a,
          'Sample 2' = sample_b, 
+         'Relatedness' = rel,
          ibs0,
          ibs2,
          'Pedigree Parents' = pedigree_parents,
