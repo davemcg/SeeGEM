@@ -51,7 +51,7 @@ gemini_test_wrapper <- function(gemini_db,
                           gemini_db, ">", tmp_file)
   }
   system(gemini_query)
-  input <- readr::read_tsv(tmp_file)
+  input <- fread(tmp_file)
   # force chromosomes as characters, to avoid issues with X, Y
   if (nrow(input)>0){
     input$chrom <- as.character(input$chrom)

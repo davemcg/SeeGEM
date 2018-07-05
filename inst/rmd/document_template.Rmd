@@ -19,10 +19,10 @@ params:
     value: 1500
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(echo = F,
-                      warning = F,
-                      message = F)
+```{r Set parameter loading, include = FALSE}
+opts_chunk$set(echo = F,
+               warning = F,
+               message = F)
 ```
 
 <style type="text/css">
@@ -33,7 +33,7 @@ margin-right: auto;
 }
 </style>
 
-```{r, include = FALSE}
+```{r Load and format GEMINI data, include = FALSE}
 # if data given as character, assume it's a path to an Rdata file
 if (is.character(params$GEMINI_data_frame)){
   gdf <- load(params$GEMINI_data_frame)
@@ -46,8 +46,7 @@ document_data <- See_GEM_formatter(GEMINI_data)
 # `r params$sample_name` {.tabset}
 
 ## GEMINI Variation
-```{r}
-
+```{r Print GEMINI DataTable}
 DT::datatable(document_data$GEMINI_data %>% mutate_if(is.numeric, funs(as.numeric(formatC(., format = "e", digits = 2)))), 
               width = params$table_width, 
               escape = FALSE,
@@ -86,11 +85,11 @@ A small selection of outputs from the [peddy](http://peddy.readthedocs.io) tool.
 For the plots, gray are all of the samples available in the vcf that [peddy](http://peddy.readthedocs.io)
 was run on. The colored points are samples in the family analyzed in this document. 
 
-```{r, include = FALSE}
+```{r Load peddy data, include = FALSE}
 # load peddy data
-ped_check <- readr::read_csv(paste0(params$peddy_path_prefix, ".ped_check.csv"))
-het_check <- readr::read_csv(paste0(params$peddy_path_prefix, ".het_check.csv"))
-sex_check <- readr::read_csv(paste0(params$peddy_path_prefix, ".sex_check.csv"))
+ped_check <- fread(paste0(params$peddy_path_prefix, ".ped_check.csv"))
+het_check <- fread(paste0(params$peddy_path_prefix, ".het_check.csv"))
+sex_check <- fread(paste0(params$peddy_path_prefix, ".sex_check.csv"))
 peddy_id <- params$peddy_id
 
 het_processor <- function(df, stat_to_filter){
@@ -109,7 +108,7 @@ idr_baf_data <- het_processor(het_check, 'idr_baf')
 - Het Ratio: proportion of sites that were heterozygous.
 - IDR BAF: inter-decile range (90th percentile - 10th percentile) of b-allele frequency. Large values indicate likely sample contamination.
 
-```{r}
+```{r Print Het plots}
 het_ratio <- het_data %>% 
   ggplot(aes(x=stat, y=value)) + 
   geom_quasirandom(color = 'gray', alpha=0.7) + 
@@ -134,17 +133,17 @@ idr_baf <- idr_baf_data %>%
   theme_minimal() + 
   xlab('') + ylab('') + ggtitle('IDR BAF') + theme( axis.text.x=element_blank(), axis.ticks.x=element_blank())
 
-legend <- cowplot::get_legend(idr_baf+ theme(legend.position="right"))
-cowplot::plot_grid(median_depth + theme(legend.position="none"),
-                   NULL,
-                   het_ratio + theme(legend.position="none"), 
-                   NULL,
-                   idr_baf + theme(legend.position="none"), 
-                   NULL,
-                   legend,
-                   rel_widths = c(1,0.1,1,0.1,1,0.1,0.4),
-                   scale=0.9,
-                   nrow=1) 
+legend <- get_legend(idr_baf+ theme(legend.position="right"))
+plot_grid(median_depth + theme(legend.position="none"),
+          NULL,
+          het_ratio + theme(legend.position="none"), 
+          NULL,
+          idr_baf + theme(legend.position="none"), 
+          NULL,
+          legend,
+          rel_widths = c(1,0.1,1,0.1,1,0.1,0.4),
+          scale=0.9,
+          nrow=1) 
 ```
 
 ### [peddy](http://peddy.readthedocs.io) Sex Check
@@ -153,7 +152,7 @@ cowplot::plot_grid(median_depth + theme(legend.position="none"),
 - Predicted Sex: Sex predicted from rate of heterozygotes on chrX
 - Error: Deviation between given and predicted sex
 
-```{r}
+```{r Print Sex Data}
 sex_check %>% 
   filter(sample_id %in% peddy_id) %>% 
   select('Sample ID' = sample_id, 'Pedigree Sex' = ped_sex, 'Predicted Sex' = predicted_sex, 'Error' = error) %>% 
@@ -170,7 +169,7 @@ sex_check %>%
 - Relatedness: the relatedness calculated from the genotypes.
 - IBS2 against IBS0: IBS0 is the number of sites where the two samples shared no alleles (~0 for parent-child) and IBS2 is where the two samples were both homozygous reference, heterozygous, or homozyous alternative. This should be fairly high between related individuals. An intermediate IBS0 suggests first cousin or second cousin. 
 
-```{r}
+```{r Print PED data table}
 ped_check %>% 
   filter(sample_a %in% peddy_id, sample_b %in% peddy_id) %>% 
   select('Sample 1' = sample_a,
@@ -189,7 +188,7 @@ ped_check %>%
                                buttons = list(list(extend='pageLength'))))
 ```
 
-```{r}
+```{r Print IBS2 IBS0 plot}
 ped_check %>% 
   ggplot(aes(x=ibs0, y=ibs2)) + 
   geom_point(aes(x=ibs0, y=ibs2), color='gray', alpha=0.7) + 
@@ -215,9 +214,9 @@ The analyst for this report populated the information in this dynamic documents 
 **FAQ**:
 
 - What does it mean if a variant is marked in red?
-  - This means that the variant has an impact severity of [HIGH](http://gemini.readthedocs.io/en/latest/content/database_schema.html#details-of-the-impact-and-impact-severity-columns) **or** is marked as pathogenic in ClinVar **and** has a gnomAD population allele frequency less than 1%. 
+- This means that the variant has an impact severity of [HIGH](http://gemini.readthedocs.io/en/latest/content/database_schema.html#details-of-the-impact-and-impact-severity-columns) **or** is marked as pathogenic in ClinVar **and** has a gnomAD population allele frequency less than 1%. 
 - Orange?
-  - [MED](http://gemini.readthedocs.io/en/latest/content/database_schema.html#details-of-the-impact-and-impact-severity-columns) impact severity
+- [MED](http://gemini.readthedocs.io/en/latest/content/database_schema.html#details-of-the-impact-and-impact-severity-columns) impact severity
 
 
 **WARNINGS/LIMITATIONS** 

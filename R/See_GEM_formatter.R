@@ -51,8 +51,8 @@ See_GEM_formatter <- function(GEMINI_data,
   #GEMINI_data <- data.table::rbindlist(x) %>% data.frame()
   # replace all underscores with a space
   if (underscore_to_space == 'yes'){
-    GEMINI_data <- GEMINI_data %>% mutate_if(is.character, stringr::str_replace_all, pattern = '_', replacement = ' ') %>% 
-      mutate_if(is.factor, stringr::str_replace_all, pattern = '_', replacement = ' ')
+    GEMINI_data <- GEMINI_data %>% mutate_if(is.character, str_replace_all, pattern = '_', replacement = ' ') %>% 
+      mutate_if(is.factor, str_replace_all, pattern = '_', replacement = ' ')
   }
   
   # set test column as factor
