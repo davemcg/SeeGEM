@@ -8,7 +8,7 @@ Click [here](https://cdn.rawgit.com/davemcg/see_gem/master/inst/extdata/demo.htm
 # Who would use See GEM?
 The bioinformatician who is running (scripted) GEMINI queries and would like to share results with someone who isn't going to run custom GEMINI queries for their samples. 
 
-That said, the document is generated quickly (seconds). The limiting factor are the speed of the GEMINI queries. So it could be used semi-interactively for a command-line skilled analyst who wanted a friendlier output from GEMINI than `less` and `csvkit`. 
+That said, the document is generated quickly (seconds). The limiting factor is the speed of the GEMINI queries. So it could be used semi-interactively for a command-line skilled analyst who wanted a friendlier output from GEMINI than `less` and `csvkit`. 
 
 # Why not just use [insert web service]?
 You don't have to hook into a web page which may disappear in `x` months/years. 
