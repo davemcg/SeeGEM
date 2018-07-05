@@ -5,10 +5,10 @@
 \title{Knit SeeGEM with peddy stats}
 \usage{
 knit_see_gem(rmd = system.file("rmd/document_template.Rmd", package =
-  "SeeGEM"), output_file = "SeeGEM_document.html",
+  "SeeGEM"), output_file = "~/SeeGEM_document.html",
   GEMINI_data = system.file("extdata/GEMINI_data.Rdata", package = "SeeGEM"),
   peddy_path_prefix = paste0(system.file("extdata/", package = "SeeGEM"),
-  "SEE_GEM_PEDDY"), peddy_id = c("1045", "1046", "1265"),
+  "SEE_GEM_PEDDY"), peddy_id = c("1045", "1046", "1265"), skip_stats = "no",
   sample_name = "BLANK", title = "SeeGEM Test Report")
 }
 \arguments{
