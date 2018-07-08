@@ -19,11 +19,14 @@
 #' 
 #' @return None
 #' 
+#' @import dplyr
+#' @import stringr
+#' 
 #' @export
 #' 
 #' @examples 
-#' GEMINI_data <- data.table::rbindlist(gemini_caller('/path/to/gemini.db', 'autosomal_recessive'),
-#' gemini_caller('/path/to/gemini.db', 'autosomal_dominant', "aaf < 0.05 AND aaf_esp_all < 0.001 AND aaf_1kg_all < 0.001 AND af_exac_all < 0.001 AND (is_coding=1 OR is_splicing=1 OR impact_severity='HIGH') AND filter is NULL"))
+#' GEMINI_data <- data.table::rbindlist(gemini_test_wrapper('/path/to/gemini.db', 'autosomal_recessive', families = 'the_fam'),
+#' gemini_test_wrapper('/path/to/gemini.db', 'autosomal_dominant', filter = "aaf < 0.05 AND aaf_esp_all < 0.001 AND aaf_1kg_all < 0.001 AND af_exac_all < 0.001 AND (is_coding=1 OR is_splicing=1 OR impact_severity='HIGH') AND filter is NULL"), families = 'the_fam')
 #' See_GEM_formatter(GEMINI_data)
 
 See_GEM_formatter <- function(GEMINI_data, 

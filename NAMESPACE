@@ -2,7 +2,10 @@
 
 export(See_GEM_formatter)
 export(gemini_query_wrapper)
-export(gemini_stat_wrapper)
 export(gemini_test_wrapper)
 export(knit_see_gem)
 export(link_generator)
+import(data.table)
+import(dplyr)
+import(readr)
+import(stringr)

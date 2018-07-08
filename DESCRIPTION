@@ -1,7 +1,32 @@
 Package: SeeGEM
+Title: Integrate GEMINI and peddy output with interactive html document
 Version: 0.0.1
-Depends: R (>= 3.4.0), dplyr, tidyr, data.table, rmarkdown, magrittr, stringr, ggbeeswarm, ggplot2, cowplot, ggrepel, DT, knitr
+Authors@R: person('David', 'McGaughey', 
+      email = 'mcgaughey@gmail.com', 
+      role = c('aut','cre'))
+Description: This package has a series of scripts to call GEMINI (an integrated 
+  database framework to annotate and query a vcf) and import likely pathogenic
+  results into R as a data frame. This data can then be decorated by adding 
+  hyperlinks and assigning color; this is all knit into an interactive
+  html document. 
+Depends: R (>= 3.4.0), 
+Imports: dplyr, 
+  tidyr, 
+  readr,
+  data.table, 
+  rmarkdown, 
+  magrittr, 
+  stringr, 
+  ggbeeswarm, 
+  ggplot2, 
+  cowplot, 
+  ggrepel, 
+  DT, 
+  knitr
 RoxygenNote: 6.0.1
 Suggests: knitr,
     rmarkdown
 VignetteBuilder: knitr
+License: file LICENSE
+LazyData: true
+

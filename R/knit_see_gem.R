@@ -3,7 +3,9 @@
 #' Create the interactive html document
 #' 
 #' @param rmd Path to a custom R markdown file. A default R markdown file is 
-#' provided with this package.
+#' provided with this package
+#' @output_file Path and name (I recommend ending in 'html', as this is what the file
+#' is) of your output file. 
 #' @param GEMINI_data Path to .Rdata data frame which contains the Data Frame 
 #' of the GEMINI output that will be plotted. Helper scripts are provided as 
 #' \code{\link{gemini_test_wrapper}} and \code{\link{gemini_query_wrapper}} 

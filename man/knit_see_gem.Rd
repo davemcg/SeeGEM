@@ -13,7 +13,7 @@ knit_see_gem(rmd = system.file("rmd/document_template.Rmd", package =
 }
 \arguments{
 \item{rmd}{Path to a custom R markdown file. A default R markdown file is 
-provided with this package.}
+provided with this package}
 
 \item{GEMINI_data}{Path to .Rdata data frame which contains the Data Frame 
 of the GEMINI output that will be plotted. Helper scripts are provided as 
