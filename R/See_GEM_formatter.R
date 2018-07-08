@@ -25,9 +25,16 @@
 #' @export
 #' 
 #' @examples 
-#' GEMINI_data <- data.table::rbindlist(gemini_test_wrapper('/path/to/gemini.db', 'autosomal_recessive', families = 'the_fam'),
-#' gemini_test_wrapper('/path/to/gemini.db', 'autosomal_dominant', filter = "aaf < 0.05 AND aaf_esp_all < 0.001 AND aaf_1kg_all < 0.001 AND af_exac_all < 0.001 AND (is_coding=1 OR is_splicing=1 OR impact_severity='HIGH') AND filter is NULL"), families = 'the_fam')
+#' \dontrun{
+#' GEMINI_data <- data.table::rbindlist(gemini_test_wrapper('/path/to/gemini.db', 
+#' 'autosomal_recessive', families = 'the_fam'),
+#' gemini_test_wrapper('/path/to/gemini.db', 'autosomal_dominant', filter = 
+#' "aaf < 0.05 AND aaf_esp_all < 0.001 AND aaf_1kg_all < 0.001 AND 
+#' af_exac_all < 0.001 AND 
+#' (is_coding=1 OR is_splicing=1 OR impact_severity='HIGH') AND 
+#' filter is NULL" , families = 'the_fam'))
 #' See_GEM_formatter(GEMINI_data)
+#' }
 
 See_GEM_formatter <- function(GEMINI_data, 
                               core_fields = c("test", "pos_id", "impact_so", "gene", 
@@ -42,8 +49,7 @@ See_GEM_formatter <- function(GEMINI_data,
                               genotypes = c("test", "pos_id", "gene", "impact_so", "family_members", "family_genotypes"),
                               extra_columns_to_retain = '^gno|rankscore$|*num*|^clin|*domain*|*codon*',
                               linkify = 'yes',
-                              underscore_to_space = 'yes',
-                              cut_down){
+                              underscore_to_space = 'yes'){
   # add color labeling
   GEMINI_data <- GEMINI_data %>% 
     mutate(Color = case_when(impact_severity == 'MED' ~ 1,

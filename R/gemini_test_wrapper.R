@@ -14,10 +14,14 @@
 #' 
 #' @return None
 #' 
+#' @importFrom data.table fread
 #' @export
 #' 
 #' @examples
-#' gemini_test_wrapper('/path/to/your/gemini.db', 'autosomal_dominant', families = 'fam007')
+#' \dontrun{
+#' gemini_test_wrapper('/path/to/your/gemini.db', 'autosomal_dominant', 
+#' families = 'fam007')
+#' }
 
 
 gemini_test_wrapper <- function(gemini_db, 

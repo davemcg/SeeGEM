@@ -14,13 +14,17 @@
 #' 
 #' @return None
 #' 
-#' @import data.table
+#' @importFrom data.table fread
 #' @import readr
 #' 
 #' @export
 #' 
 #' @examples
-#' gemini_query_wrapper('/path/to/your/gemini.db', ... = "\"SELECT * FROM variants WHERE (aaf_esp_all < 0.01 AND IMPACT_SO LIKE '%STOP%' AND filter is NULL) LIMIT 20\"")
+#' \dontrun{
+#' gemini_query_wrapper('/path/to/your/gemini.db', ... = "\"SELECT * FROM 
+#' variants WHERE (aaf_esp_all < 0.01 AND IMPACT_SO LIKE '%STOP%' AND 
+#' filter is NULL) LIMIT 20\"")
+#' }
 
 
 gemini_query_wrapper <- function(gemini_db, test_name="CUSTOM1", output = NA, ...){

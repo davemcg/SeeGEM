@@ -24,5 +24,7 @@ Uses GEMINI database to extracts some useful stats from the
 \code{\link{knit_see_gem}} uses to build the stats tab.
 }
 \examples{
+\dontrun{
 gemini_stat_wrapper('/path/to/gemini.db', 'Sample007', is_family = 'no')
+}
 }

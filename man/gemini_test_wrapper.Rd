@@ -31,5 +31,8 @@ None
 Calls GEMINI's built in tools (e.g. autosomal_dominant, comp_hets) to retrieve proband/trio specific variants. Returns a tibble of all of the columns available in your GEMINI database.
 }
 \examples{
-gemini_test_wrapper('/path/to/your/gemini.db', 'autosomal_dominant', families = 'fam007')
+\dontrun{
+gemini_test_wrapper('/path/to/your/gemini.db', 'autosomal_dominant', 
+families = 'fam007')
+}
 }

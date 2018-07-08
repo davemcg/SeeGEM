@@ -24,15 +24,13 @@ which will return the GEMINI output as a data frame into your R session.}
 
 \item{title}{The title of the document}
 
+\item{peddy_path_prefix}{Path and prefix for the peddy output}
+
 \item{peddy_id}{A character vector of the samples you want to highlight in the
 peddy QC tab}
 
 \item{skip_stats}{If set to 'yes' this will use an alternate template which
 has no `peddy QC` tab.}
-
-\item{peddy_stats}{Path and prefix for the peddy output}
-
-\item{sample_name}{=}
 }
 \value{
 None
@@ -43,8 +41,9 @@ Create the interactive html document
 \examples{
 # will output just the example document to ~/SeeGEM_document.html
 knit_see_gem()
-# more realistic example which does an automsal recessive test for the DDL003 family
-knit_see_gem(GEMINI_data = gemini_test_wrapper('2018_06_28__OGVFB_exomes.GATK.PED_master.gemini.db', 
+# more realistic example which does an automsal recessive test 
+knit_see_gem(GEMINI_data = 
+gemini_test_wrapper('2018_06_28__OGVFB_exomes.GATK.PED_master.gemini.db', 
 test = 'autosomal_recessive', 
 families = 'DDL003'), 
 output_file='~/quick_SeeGEM.html', 

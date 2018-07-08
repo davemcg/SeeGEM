@@ -27,5 +27,9 @@ with already functional `gemini query --header -q` commands. You \strong{must}
 escape (append \) your quote marks.
 }
 \examples{
-gemini_query_wrapper('/path/to/your/gemini.db', ... = "\\"SELECT * FROM variants WHERE (aaf_esp_all < 0.01 AND IMPACT_SO LIKE '\%STOP\%' AND filter is NULL) LIMIT 20\\"")
+\dontrun{
+gemini_query_wrapper('/path/to/your/gemini.db', ... = "\\"SELECT * FROM 
+variants WHERE (aaf_esp_all < 0.01 AND IMPACT_SO LIKE '\%STOP\%' AND 
+filter is NULL) LIMIT 20\\"")
+}
 }

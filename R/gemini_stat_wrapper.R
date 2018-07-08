@@ -13,10 +13,12 @@
 #' @return None
 #'
 #' @import readr
-#' @import data.table
+#' @importFrom data.table fread
 #' 
 #' @examples
+#' \dontrun{
 #' gemini_stat_wrapper('/path/to/gemini.db', 'Sample007', is_family = 'no')
+#' }
 
 gemini_stat_wrapper <- function(gemini_db, ID, is_family = 'yes'){
   gemini_stats = list()
