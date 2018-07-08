@@ -36,6 +36,7 @@
 #' See_GEM_formatter(GEMINI_data)
 #' }
 
+
 See_GEM_formatter <- function(GEMINI_data, 
                               core_fields = c("test", "pos_id", "impact_so", "gene", 
                                               "hgvsc", "hgvsp", "aaf", "gno_af_all", 
@@ -50,6 +51,7 @@ See_GEM_formatter <- function(GEMINI_data,
                               extra_columns_to_retain = '^gno|rankscore$|*num*|^clin|*domain*|*codon*',
                               linkify = 'yes',
                               underscore_to_space = 'yes'){
+  . = NULL
   # add color labeling
   GEMINI_data <- GEMINI_data %>% 
     mutate(Color = case_when(impact_severity == 'MED' ~ 1,

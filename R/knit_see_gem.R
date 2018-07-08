@@ -4,7 +4,7 @@
 #' 
 #' @param rmd Path to a custom R markdown file. A default R markdown file is 
 #' provided with this package
-#' @output_file Path and name (I recommend ending in 'html', as this is what the file
+#' @param output_file Path and name (I recommend ending in 'html', as this is what the file
 #' is) of your output file. 
 #' @param GEMINI_data Path to .Rdata data frame which contains the Data Frame 
 #' of the GEMINI output that will be plotted. Helper scripts are provided as 
@@ -25,6 +25,7 @@
 #' @export
 #' 
 #' @examples 
+#' \dontrun{
 #' # will output just the example document to ~/SeeGEM_document.html
 #' knit_see_gem()
 #' # more realistic example which does an automsal recessive test 
@@ -34,6 +35,7 @@
 #' families = 'DDL003'), 
 #' output_file='~/quick_SeeGEM.html', 
 #' skip_stats = 'yes')
+#' }
 
 knit_see_gem <- function(rmd = system.file("rmd/document_template.Rmd", package="SeeGEM"),
                          output_file = '~/SeeGEM_document.html',

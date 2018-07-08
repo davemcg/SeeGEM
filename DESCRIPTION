@@ -24,8 +24,6 @@ Imports: dplyr,
   DT, 
   knitr
 RoxygenNote: 6.0.1
-Suggests: knitr,
-    rmarkdown
 VignetteBuilder: knitr
 License: file LICENSE
 LazyData: true

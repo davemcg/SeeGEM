@@ -15,6 +15,9 @@ knit_see_gem(rmd = system.file("rmd/document_template.Rmd", package =
 \item{rmd}{Path to a custom R markdown file. A default R markdown file is 
 provided with this package}
 
+\item{output_file}{Path and name (I recommend ending in 'html', as this is what the file
+is) of your output file.}
+
 \item{GEMINI_data}{Path to .Rdata data frame which contains the Data Frame 
 of the GEMINI output that will be plotted. Helper scripts are provided as 
 \code{\link{gemini_test_wrapper}} and \code{\link{gemini_query_wrapper}} 
@@ -39,6 +42,7 @@ None
 Create the interactive html document
 }
 \examples{
+\dontrun{
 # will output just the example document to ~/SeeGEM_document.html
 knit_see_gem()
 # more realistic example which does an automsal recessive test 
@@ -48,4 +52,5 @@ test = 'autosomal_recessive',
 families = 'DDL003'), 
 output_file='~/quick_SeeGEM.html', 
 skip_stats = 'yes')
+}
 }

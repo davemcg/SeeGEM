@@ -14,9 +14,7 @@
 #' @export
 #'
 #' @examples
-#' GEMINI_data$rs_ids <- sapply(gem_view$rs_ids, 
-#' function(x) 
-#' link_generator('https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=', as.character(x)) )
+#' link_generator('https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=', 'rs1800728')
 
 
 link_generator <- function(base_url, ID, split_on=',', link_name = NA){

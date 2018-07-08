@@ -26,10 +26,10 @@
 
 gemini_test_wrapper <- function(gemini_db, 
                           test = "autosomal_recessive",
-                          filter = "aaf < 0.1 AND aaf_esp_all < 0.01 AND \
-                        aaf_1kg_all < 0.01 AND af_exac_all < 0.01 AND \
-                        (is_coding=1 OR is_splicing=1 OR impact_severity='HIGH') \
-                        AND filter is NULL",
+                          filter = paste("aaf < 0.1 AND aaf_esp_all < 0.01 AND",
+                        "aaf_1kg_all < 0.01 AND af_exac_all < 0.01 AND",
+                        "(is_coding=1 OR is_splicing=1 OR impact_severity='HIGH')",
+                        "AND filter is NULL"),
                           min_gq = 20,
                           families = NA,
                           ...){
