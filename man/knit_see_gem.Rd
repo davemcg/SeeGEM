@@ -9,7 +9,8 @@ knit_see_gem(rmd = system.file("rmd/document_template.Rmd", package =
   GEMINI_data = system.file("extdata/GEMINI_data.Rdata", package = "SeeGEM"),
   sample_name = NA, title = "SeeGEM Test Report",
   peddy_path_prefix = paste0(system.file("extdata/", package = "SeeGEM"),
-  "SEE_GEM_PEDDY"), peddy_id = c("1045", "1046", "1265"), skip_stats = "no")
+  "/SEE_GEM_PEDDY"), peddy_id = c("1045", "1046", "1265"),
+  skip_stats = "no")
 }
 \arguments{
 \item{rmd}{Path to a custom R markdown file. A default R markdown file is 

@@ -1,5 +1,5 @@
 ---
-title: "SeeGEM_Quick_Start"
+title: "SeeGEM Quick Start"
 author: "David McGaughey"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -23,15 +23,16 @@ The SeeGEM package contains the information used to create the
 Before you get started with your own data, I suggest you recreate this document
 to make sure you have all of the libraries and pandoc installed on your computer.
 
-```{r, eval=F}
+```{r}
+library(SeeGEM)
 knit_see_gem()
 ```
 
 This should create `SeeGEM_document.html` in your base user directory (`~/`)
 
-OK, let's try to use your own data. You will need the following:
+Now it is time to use your own data. You will need the following:
 
-  1. GEMINI installed (e.g. if you go to your bash shell and type `gemini` it will run (with an error about `too few arguments`)
+  1. GEMINI installed (e.g. if you go to your shell and type `gemini` it will run (with an error about `too few arguments`)
   2. A GEMINI database
 
 You can use the \code{\link{gemini_test_wrapper}} or \code{\link{gemini_query_wrapper}} functions to call
