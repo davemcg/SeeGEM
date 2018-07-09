@@ -2,7 +2,9 @@
 title: "SeeGEM Quick Start"
 author: "David McGaughey"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_document:
+    theme: flatly
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
   %\VignetteEngine{knitr::rmarkdown}

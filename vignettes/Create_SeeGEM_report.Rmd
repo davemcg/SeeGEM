@@ -1,8 +1,10 @@
 ---
-title: "Create_SeeGEM_report"
+title: "Create SeeGEM Report"
 author: "David McGaughey"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_document:
+    theme: flatly
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
   %\VignetteEngine{knitr::rmarkdown}
@@ -26,7 +28,7 @@ For each of our exomes and WGS, we use many of the built in [GEMINI](http://gemi
 tools as well as a custom query to identify deleterious variants in the 
 [ACMG 59 gene list](https://www.ncbi.nlm.nih.gov/clinvar/docs/acmg/). 
 
-In the [Quick Start](Quick_Start.Rmd) vignette we see how SeeGEM can be used to
+In the [Quick Start](Quick_Start.html) vignette we see how SeeGEM can be used to
 quickly and easily create the SeeGEM document for a single query. 
 
 In this vignette we will see how to bundle together a complicated set of queries
@@ -56,19 +58,24 @@ It takes four inputs:
 You could run it as follows on the bash command line:
 
 ```{bash, eval=F}
-Rscript ~/GEMINI_db_to_SeeGEM.R Family001 ~/See_GEM_Family001.html ~/peddy_output/YOUR_PEDDY_PREFIX
+Rscript ~/GEMINI_db_to_SeeGEM.R Family001 /path/to/your/GEMINI.db ~/See_GEM_Family001.html /path/to/peddy_data/YOUR_PEDDY_PREFIX
 ```
 
 If you open up the script in Rstudio (or whatever IDE you prefer), you will
 see that the script creates a list object `r GEMINI_list <- list()` then runs
 a series of GEMINI queries with the \code{\link{gemini_test_wrapper}} and
-\code{\link{gemini_query_wrapper}}. These are fairly lightweight wrappers
+\code{\link{gemini_query_wrapper}} and stores the output in the list object. 
+
+These are fairly lightweight wrappers
 and they only do three things to the [GEMINI](http://gemini.readthedocs.io) data:
 
 1. Import the data with the data.table fread function
 2. Coerce the `chrom` column to character to avoid possible 1,2,...X,Y issues
 3. Add a new column `test` which labels what kind of [GEMINI](http://gemini.readthedocs.io)
 query/test was run
+
+At the end, the list data is turned into a single data frame with data.table
+function rbindlist. 
 
 If you have your own functioning python/bash scripts creating GEMINI queries 
 already, you probably can simply import the data into R as follows:
@@ -86,6 +93,5 @@ as the `GEMINI_data` like so:
 ```{r, eval = F}
 knit_see_gem(GEMINI_data = your_gemini_data, sample_name = 'Proband 001')
 ```
-
 
 
