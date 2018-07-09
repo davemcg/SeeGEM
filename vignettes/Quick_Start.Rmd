@@ -30,6 +30,13 @@ knit_see_gem()
 
 This should create `SeeGEM_document.html` in your base user directory (`~/`)
 
+To see an example of what the [peddy](http://peddy.readthedocs.io/en/latest/) 
+integrated report looks like run this:
+
+```{r}
+knit_see_gem(skip_stats = 'no')
+```
+
 Now it is time to use your own data. You will need the following:
 
   1. GEMINI installed (e.g. if you go to your shell and type `gemini` it will run (with an error about `too few arguments`)

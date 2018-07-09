@@ -4,7 +4,6 @@ args = commandArgs(trailingOnly=TRUE)
 gemini_db <- args[1]
 family_name <- args[2]
 output_html <- args[3]
-
 peddy_path <- args[4]
 
 
@@ -105,9 +104,9 @@ GEMINI_list$acmg <- gemini_query_wrapper(gemini_db,
                                          test_name = 'ACMG59')
 writeLines('ACMG test done')
 
-# rbindlist will collapse each element of the list into one data frame
+# data.table rbindlist will collapse each element of the list into one data frame
 # gemini_query_wrapper() and gemini_test_wrapper() will add the test name
-# to each query, so you can distinguish them later
+# to each query, so you can distinguish them later (via the 'test' column)
 my_GEMINI_data <- rbindlist(GEMINI_list, fill = TRUE)
 
 # now that you've created the core data, you can create the reactive document
