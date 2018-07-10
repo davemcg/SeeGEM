@@ -4,7 +4,7 @@ R library which takes output from [GEMINI](http://gemini.readthedocs.io) and, op
 The idea to provide a happy medium between GEMINI output piped into `less` and using a web service like http://vcf.iobio.io. 
 
 ## Wait, what?
-Click [here](https://cdn.rawgit.com/davemcg/see_gem/master/inst/extdata/demo.html?raw=True) to see a sample.
+Click [here](https://cdn.rawgit.com/davemcg/SeeGEM_docs/98d1b0cf/demos/demo.html) to see a sample.
 
 ## Who would use See GEM?
 The bioinformatician who is running (scripted) GEMINI queries and would like to share results with someone who isn't going to run custom GEMINI queries for their samples. 
@@ -23,6 +23,12 @@ Well, that's actually what I have been doing for a few years. The analysts are n
 
 It also has custom selectable columns and filtering options to quickly do some basic searches (highest CADD, lowest cohort AF, etc.). These are fiddly to do in Excel. 
 
+## Documentation? Quick Start? 
+They are included in the package (see below), but also you can click these two:
+
+  1. [Quick Start](https://cdn.rawgit.com/davemcg/SeeGEM_docs/98d1b0cf/vignettes/Quick_Start.html)
+  2. [Create SeeGEM report](https://cdn.rawgit.com/davemcg/SeeGEM_docs/98d1b0cf/vignettes/Create_SeeGEM_report.html)
+  
 ## Wow this sounds amazing, I want to use this right now!
 You can run `devtools::install_github('davemcg/see_gem', build_vignettes=T)` and read the documentation. Be warned - this is pre-alpha software and functions will change (sometimes dramatically). 
 
