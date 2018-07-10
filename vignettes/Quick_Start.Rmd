@@ -20,7 +20,7 @@ comment = "#>"
 
 ## Quick Start
 The SeeGEM package contains the information used to create the 
-[demo file](https://cdn.rawgit.com/davemcg/see_gem/master/inst/extdata/demo.html?raw=True)
+[demo file](https://cdn.rawgit.com/davemcg/SeeGEM_docs/98d1b0cf/demos/demo.html)
 
 Before you get started with your own data, I suggest you recreate this document
 to make sure you have all of the libraries and pandoc installed on your computer.
