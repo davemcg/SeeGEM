@@ -53,7 +53,23 @@ knit_see_gem <- function(rmd = system.file("rmd/document_template.Rmd", package=
                          peddy_id = c('1045', '1046', '1265'),
                          skip_stats = 'no'){
   
+  # if data given as character, assume it's a path to an Rdata file
+  if (is.character(GEMINI_data)){
+    gdf <- load(GEMINI_data)
+    GEMINI_data <- get(gdf)
+    rm(gdf)
+  }
+  
+  # stop doc creation if nrow or ncol is 0 for input data 
+  if ((nrow(GEMINI_data) == 0 | ncol(GEMINI_data) == 0)){
+    stop('Empty data frame given as input!')
+  }
+  
+  document_data <- See_GEM_formatter(GEMINI_data)
+
+  
   if (skip_stats == 'no'){
+    
     rmarkdown::render(system.file("rmd/document_template.Rmd", package="SeeGEM"),
                       output_file = output_file,
                       params = list(GEMINI_data_frame = GEMINI_data,

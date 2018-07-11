@@ -91,9 +91,10 @@ See_GEM_formatter <- function(GEMINI_data,
   }
   
   # add spacing to family_members
-  GEMINI_data$family_members <- gsub(',','<br/>', GEMINI_data$family_members)
-  GEMINI_data$family_genotypes <- gsub(',','<br/>', GEMINI_data$family_genotypes)
-  
+  if ('family_members' %in% colnames(GEMINI_data)){
+    GEMINI_data$family_members <- gsub(',','<br/>', GEMINI_data$family_members)
+    GEMINI_data$family_genotypes <- gsub(',','<br/>', GEMINI_data$family_genotypes)
+  }
   # linkify
   if (linkify == 'yes'){
     GEMINI_data$pos_id <- sapply(GEMINI_data$pos_id, 
@@ -138,7 +139,7 @@ See_GEM_formatter <- function(GEMINI_data,
   neg_in_silico_index <- setdiff(all_cols, in_silico_index)
   genotypes_index <- match(genotypes, colnames(GEMINI_data))
   neg_genotypes_index <- setdiff(all_cols, genotypes_index)
-
+  
   # round numeric nums down
   GEMINI_data <- GEMINI_data %>% 
     mutate_if(is.numeric, funs(ifelse(is.na(.), -1, .))) %>% 
