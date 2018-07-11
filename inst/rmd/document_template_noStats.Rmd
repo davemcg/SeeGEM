@@ -17,6 +17,8 @@ params:
     value: SampleReport
   table_width:
     value: 1500
+  decorate:
+    value: TRUE
 ---
 
 ```{r Set parameter loading, include = FALSE}
@@ -33,14 +35,12 @@ margin-right: auto;
 }
 </style>
 
-```{r Load and format GEMINI data, include = FALSE}
-# if data given as character, assume it's a path to an Rdata file
-if (is.character(params$GEMINI_data_frame)){
-  gdf <- load(params$GEMINI_data_frame)
-  GEMINI_data <- get(gdf)
-  rm(gdf)
-}
-document_data <- See_GEM_formatter(GEMINI_data)
+```{r Format GEMINI data, include = FALSE}
+# decorate data, or return as given
+if (params$decorate){
+  document_data <- See_GEM_formatter(GEMINI_data)
+} else{
+  document_data <- GEMINI_data}
 ```
 
 # `r params$sample_name` {.tabset}
