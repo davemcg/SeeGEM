@@ -107,7 +107,7 @@ writeLines('ACMG test done')
 # data.table rbindlist will collapse each element of the list into one data frame
 # gemini_query_wrapper() and gemini_test_wrapper() will add the test name
 # to each query, so you can distinguish them later (via the 'test' column)
-my_GEMINI_data <- rbindlist(GEMINI_list, fill = TRUE)
+my_GEMINI_data <- data.table::rbindlist(GEMINI_list, fill = TRUE)
 
 # now that you've created the core data, you can create the reactive document
 # I'm assuming you've already run peddy on the same vcf you used to make the GEMINI
