@@ -6,6 +6,7 @@ family_name <- args[2]
 output_html <- args[3]
 peddy_path <- args[4]
 
+cur_dir <- getwd()
 
 library(SeeGEM)
 
@@ -48,7 +49,7 @@ GEMINI_list$xlr <- gemini_test_wrapper(gemini_db,
                                        (is_coding=1 OR is_splicing=1 OR impact_severity='HIGH') 
                                        AND filter IS NULL",
                                        families = family_name)
-writeLines('XLRecessive test done')
+writeLines('XL Recessive test done')
 GEMINI_list$xld <- gemini_test_wrapper(gemini_db, 
                                        test = 'x_linked_dominant', 
                                        min_gq = 20, 
@@ -57,7 +58,7 @@ GEMINI_list$xld <- gemini_test_wrapper(gemini_db,
                                        (is_coding=1 OR is_splicing=1 OR impact_severity='HIGH') 
                                        AND filter IS NULL",
                                        families = family_name)
-writeLines('XLDominant test done')
+writeLines('XL Dominant test done')
 GEMINI_list$xldn <- gemini_test_wrapper(gemini_db, 
                                         test = 'x_linked_de_novo', 
                                         min_gq = 20, 
@@ -122,8 +123,8 @@ sample_ped <- gemini_query_wrapper(gemini_db,
                                                 family_name, "' \""))
 
 knit_see_gem(GEMINI_data = my_GEMINI_data, 
-             output_file = output_html, 
-             peddy_path_prefix = peddy_path, 
+             output_file = paste0(cur_dir, '/', output_html),
+             peddy_path_prefix = paste0(cur_dir,'/',peddy_path),
              peddy_id = sample_ped$name, 
              sample_name = family_name)
 
