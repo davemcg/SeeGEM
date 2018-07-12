@@ -60,13 +60,14 @@ knit_see_gem <- function(rmd = system.file("rmd/document_template.Rmd", package=
     rm(gdf)
   }
   
-  # stop doc creation if nrow or ncol is 0 for input data 
+  # warn if nrow or ncol is 0 for input data 
   if ((nrow(GEMINI_data) == 0 | ncol(GEMINI_data) == 0)){
-    stop('Empty data frame given as input!')
+    warning('Empty data frame given as input!')
+    document_data <- GEMINI_data
+  } else { 
+    document_data <- See_GEM_formatter(GEMINI_data) 
   }
   
-  document_data <- See_GEM_formatter(GEMINI_data)
-
   
   if (skip_stats == 'no'){
     
