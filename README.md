@@ -1,5 +1,7 @@
 # See GEM
-![](https://github.com/davemcg/SeeGEM_docs/blob/master/hex_sticker/SeeGEM_doodlee.JPG)
+<a href="url"><img src="https://github.com/davemcg/SeeGEM_docs/blob/master/hex_sticker/SeeGEM_doodlee.JPG" align="left" width="148" ></a>
+<br>
+
 
 R library which takes output from [GEMINI](http://gemini.readthedocs.io) and, optionally, [peddy](http://peddy.readthedocs.io) and wraps it into a interactive html document. 
 
