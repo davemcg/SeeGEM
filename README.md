@@ -1,4 +1,6 @@
 # See GEM
+![](https://github.com/davemcg/SeeGEM_docs/blob/master/hex_sticker/SeeGEM_doodlee.JPG)
+
 R library which takes output from [GEMINI](http://gemini.readthedocs.io) and, optionally, [peddy](http://peddy.readthedocs.io) and wraps it into a interactive html document. 
 
 The idea to provide a happy medium between GEMINI output piped into `less` and using a web service like http://vcf.iobio.io. 
