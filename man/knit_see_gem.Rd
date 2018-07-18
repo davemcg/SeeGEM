@@ -5,7 +5,8 @@
 \title{Knit SeeGEM with peddy stats}
 \usage{
 knit_see_gem(rmd = system.file("rmd/document_template.Rmd", package =
-  "SeeGEM"), output_file = "~/SeeGEM_document.html",
+  "SeeGEM"), output_file = "SeeGEM_document.html",
+  output_directory = getwd(),
   GEMINI_data = system.file("extdata/GEMINI_data.Rdata", package = "SeeGEM"),
   sample_name = NA, title = "SeeGEM Test Report",
   peddy_path_prefix = paste0(system.file("extdata/", package = "SeeGEM"),
@@ -16,8 +17,11 @@ knit_see_gem(rmd = system.file("rmd/document_template.Rmd", package =
 \item{rmd}{Path to a custom R markdown file. A default R markdown file is 
 provided with this package}
 
-\item{output_file}{Path and name (I recommend ending in 'html', as this is what the file
+\item{output_file}{Output name (I recommend ending in 'html', as this is what the file
 is) of your output file.}
+
+\item{output_directory}{Directory the output file will be written to. 
+Defaults to your working directory.}
 
 \item{GEMINI_data}{Path to .Rdata data frame which contains the Data Frame 
 of the GEMINI output that will be plotted. Helper scripts are provided as 

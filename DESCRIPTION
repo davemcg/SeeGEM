@@ -1,6 +1,6 @@
 Package: SeeGEM
 Title: Integrate GEMINI (and peddy) Output Into Interactive Html Document
-Version: 0.1.2
+Version: 0.1.3
 Authors@R: person('David', 'McGaughey', 
       email = 'mcgaughey@gmail.com', 
       role = c('aut','cre'))

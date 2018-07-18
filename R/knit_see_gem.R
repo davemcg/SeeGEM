@@ -4,8 +4,10 @@
 #' 
 #' @param rmd Path to a custom R markdown file. A default R markdown file is 
 #' provided with this package
-#' @param output_file Path and name (I recommend ending in 'html', as this is what the file
+#' @param output_file Output name (I recommend ending in 'html', as this is what the file
 #' is) of your output file. 
+#' @param output_directory Directory the output file will be written to. 
+#' Defaults to your working directory.
 #' @param GEMINI_data Path to .Rdata data frame which contains the Data Frame 
 #' of the GEMINI output that will be plotted. Helper scripts are provided as 
 #' \code{\link{gemini_test_wrapper}} and \code{\link{gemini_query_wrapper}} 
@@ -45,7 +47,8 @@
 #' }
 
 knit_see_gem <- function(rmd = system.file("rmd/document_template.Rmd", package="SeeGEM"),
-                         output_file = '~/SeeGEM_document.html',
+                         output_file = 'SeeGEM_document.html',
+                         output_directory = getwd(),
                          GEMINI_data = system.file("extdata/GEMINI_data.Rdata", package="SeeGEM"),
                          sample_name = NA,
                          title = "SeeGEM Test Report",
@@ -73,6 +76,7 @@ knit_see_gem <- function(rmd = system.file("rmd/document_template.Rmd", package=
     
     rmarkdown::render(system.file("rmd/document_template.Rmd", package="SeeGEM"),
                       output_file = output_file,
+                      output_dir = output_directory,
                       params = list(GEMINI_data_frame = GEMINI_data,
                                     sample_name = sample_name,
                                     title = title,
@@ -81,6 +85,7 @@ knit_see_gem <- function(rmd = system.file("rmd/document_template.Rmd", package=
   } else{
     rmarkdown::render(system.file("rmd/document_template_noStats.Rmd", package="SeeGEM"),
                       output_file = output_file,
+                      output_dir = output_directory,
                       params = list(GEMINI_data_frame = GEMINI_data,
                                     sample_name = sample_name,
                                     title = title))
