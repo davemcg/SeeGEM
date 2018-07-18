@@ -60,7 +60,7 @@ to use the use the no stats template with `skip_stats = 'no'`
 knit_see_gem(GEMINI_data = gemini_test_wrapper('2018_06_28__OGVFB_exomes.GATK.PED_master.gemini.db', 
                                                test = 'autosomal_recessive', 
                                                families = 'DDL003'), 
-             output_file='~/quick_SeeGEM.html', 
+             output_file='quick_SeeGEM.html', 
              skip_stats = 'yes')
 ```
 
