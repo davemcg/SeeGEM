@@ -1,13 +1,14 @@
 Package: SeeGEM
-Title: Integrate GEMINI (and peddy) Output Into Interactive Html Document
-Version: 0.1.3
+Title: Integrate 'GEMINI' (and 'peddy') Output into Interactive Html Document
+Version: 0.1.5
 Authors@R: person('David', 'McGaughey', 
       email = 'mcgaughey@gmail.com', 
       role = c('aut','cre'))
-Description: This package contains a series of scripts to query a 'GEMINI' 
-  database (an integrated database framework to annotate and query a vcf) and 
-  import likely pathogenic results into R. This data can then be decorated by 
-  adding hyperlinks and assigning color; this is all knit with an included R
+Description: An interactive html document highlighting interesting DNA variants is
+  output with this package. SeeGEM takes data from a 'GEMINI' 
+  database (an integrated database framework to annotate and query a vcf) and then 
+  decorates the DNA variants by 
+  adding hyperlinks and assigning color. This is all knit with an included R
   markdown template into an interactive html document, which can be used in a 
   modern web browser. It is also easy to integrate 'peddy' quality control results 
   into the SeeGEM output to efficiently identify samples which have technical issues.  
@@ -25,8 +26,6 @@ Imports: dplyr,
   ggrepel, 
   knitr,
   DT
-Exports:
-  tidyr
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr
 License: file LICENSE
