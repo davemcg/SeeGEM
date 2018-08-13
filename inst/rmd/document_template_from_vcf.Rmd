@@ -1,0 +1,53 @@
+---
+date: '`r strftime(Sys.time(), format = "%B %d, %Y")`'
+title: '`r params$title`'
+output: 
+  html_document:
+    theme: flatly
+params:
+  data_frame:
+    value: NA
+  sample_name:
+    value: FILL_IN
+  title:
+    value: SampleReport
+  table_width:
+    value: 1500
+  decorate:
+    value: TRUE
+---
+
+```{r Set parameter loading, include = FALSE}
+knitr::opts_chunk$set(echo = F,
+               warning = F,
+               message = F)
+```
+
+<style type="text/css">
+.main-container {
+max-width: `r params$table_width`px; !important;
+margin-left: auto;
+margin-right: auto;
+}
+</style>
+
+# `r params$sample_name` {.tabset}
+
+## GEMINI Variation
+```{r Print GEMINI DataTable}
+DT::datatable(params$data_frame, 
+              width = params$table_width, 
+              escape = FALSE,
+              rownames = F, 
+              class='compact', 
+              filter='bottom',
+              extensions = c('Buttons','FixedHeader', 'ColReorder', 'Responsive'))
+
+```
+
+## Info
+
+This report is auto-generated with the [See GEM](https://github.com/davemcg/See_GEM) R package on `r strftime(Sys.time(), format = "%B %d, %Y")`
+
+The analyst for this report populated the information in this dynamic documents with a variety of GEMINI queries. 
+

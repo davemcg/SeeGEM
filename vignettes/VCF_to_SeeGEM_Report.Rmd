@@ -1,0 +1,82 @@
+---
+title: "VCF to SeeGEM Report Shortcut"
+author: "David McGaughey"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_document:
+    theme: flatly
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+  
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+collapse = TRUE,
+comment = "#>"
+)
+```
+
+# Motivation
+While the most useful analysis of VCF variants comes from using GEMINI, often-times the analyst just wants to quickly check a VCF. SeeGEM can use the [vcfR](https://cran.r-project.org/web/packages/vcfR/index.html) package to import a VCF and produce a SeeGEM report
+
+# Warning
+This process will load the entire VCF into memory. I strongly recommend you check the file size to make sure that the VCF is a *reasonable* size, so as not to take down your computer. I am being vague about what *reasonable* is, as that depends on how much memory you have and whether the VCF is compressed (ends in `*gz`) or not. As a rough rule of thumb, if the VCF is larger than 100mb, then I suggest you filter it before running through SeeGEM. 
+
+# Load libraries
+```{r}
+library(vcfR)
+library(dplyr)
+library(SeeGEM)
+```
+
+# Import vcf
+```{r}
+vcf <- read.vcfR(system.file("extdata/example.vcf.gz", package="SeeGEM"))
+```
+
+[vcfR](https://cran.r-project.org/web/packages/vcfR/index.html) contains a handy function to convert the vcf into a tidy dataframe. 
+```{r}
+vcf_df <- vcfR2tidy(vcf)
+```
+
+`vcfR2tidy` actually returns three tibbles (data frames):
+
+1. `fix` which holds all of the information
+2. `gt` which contains the genotype information
+3. `meta` which has the information for the INFO fields contained in the VCF header
+
+Since we want the information *and* the genotype, we are going to need to glue these together. 
+
+The `fix` and `gt` tibbles both have `ChromKey` and `POS` columns, so I will drop them from one when we column bind them
+```{r}
+for_see_gem <- cbind(vcf_df$fix, vcf_df$gt %>% select(-`ChromKey`, -`POS`))
+```
+
+We could just dump `for_see_gem` into a SeeGEM report, but that would be a bad idea. Why?
+
+Well, let's look at how many columns and rows this has.
+
+```{r}
+for_see_gem %>% dim()
+```
+
+`r vcf_df$fix %>% nrow()` rows and `r vcf_df$fix %>% ncol()` columns. This will be unpleasant to look it. 
+
+I do some light filtering (removing variants which fail the GATK filter and have a gnomAD allele frequency over 0.01) and only select the columns you are interested in before passing the data frame to `knit_see_gem_from_table` to create the document. 
+
+```{r}
+knit_see_gem_from_table(table_data = for_see_gem %>% 
+                          filter(FILTER == 'PASS', gno_af_all < 0.01) %>% 
+                          select(CHROM, POS, REF, ALT, AC, Indiv, gt_GT, gt_DP, gno_af_all, ccr_pct_v1, REVEL), 
+                        sample_name = 'EXAMPLE', 
+                        title = 'Vignette')
+```
+
+To make this process a touch easier, I have written a function which wraps the `vcfR2tidy` and `cbind` steps into one call called `vcf_to_tibble`
+
+You skip most the steps and above and get your tibble by calling this
+```{r}
+ready_for_see_gem <- vcf_to_tibble(system.file("extdata/example.vcf.gz", package="SeeGEM"))
+```

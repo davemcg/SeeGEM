@@ -5,6 +5,8 @@
 
 R library which takes output from [GEMINI](http://gemini.readthedocs.io) and, optionally, [peddy](http://peddy.readthedocs.io) and wraps it into a interactive html document. 
 
+I've recently added the ability to create a report (sans all the color hyperlinks and colors) directly from a VCF (see below). 
+
 The idea to provide a happy medium between GEMINI output piped into `less` and using a web service like http://vcf.iobio.io. 
 
 ## Wait, what?
@@ -32,6 +34,7 @@ They are included in the package (see below), but also you can click these two:
 
   1. [Quick Start](https://cdn.rawgit.com/davemcg/SeeGEM_docs/98d1b0cf/vignettes/Quick_Start.html)
   2. [Create SeeGEM report](https://cdn.rawgit.com/davemcg/SeeGEM_docs/98d1b0cf/vignettes/Create_SeeGEM_report.html)
+  3. [Go directly from VCF To SeeGEM report](https://cdn.rawgit.com/davemcg/SeeGEM_docs/92a30bc5/vignettes/VCF_to_SeeGEM_Report.html)
   
 ## Wow this sounds amazing, I want to use this right now!
 You can run `devtools::install_github('davemcg/see_gem', build_vignettes=T)` and read the documentation. Be warned - this is pre-alpha software and functions will change (sometimes dramatically). 
