@@ -4,7 +4,8 @@
 \alias{gemini_query_wrapper}
 \title{GEMINI query wrapper}
 \usage{
-gemini_query_wrapper(gemini_db, test_name = "CUSTOM1", output = NA, ...)
+gemini_query_wrapper(gemini_db, test_name = "CUSTOM1", output = NA,
+  ...)
 }
 \arguments{
 \item{gemini_db}{is the name of your GEMINI database (with path, if necessary)}

@@ -28,7 +28,7 @@ Imports: dplyr,
   knitr,
   DT,
   vcfR
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
 VignetteBuilder: knitr
 License: CC0
 LazyData: true

@@ -4,11 +4,12 @@
 \alias{See_GEM_formatter}
 \title{GEMINI data formatter}
 \usage{
-See_GEM_formatter(GEMINI_data, core_fields = c("test", "pos_id", "impact_so",
-  "gene", "hgvsc", "hgvsp", "aaf", "gno_af_all", "exac_num_hom_alt",
-  "clinvar_id", "rs_ids", "GoogleScholar"), in_silico = c("test", "pos_id",
-  "gene", "impact_so", "cadd_phred", "ccr_pct_v1", "revel", "polyphen_score",
-  "sift_score", "metalr_rankscore", "genesplicer", "spliceregion", "linsight"),
+See_GEM_formatter(GEMINI_data, core_fields = c("test", "pos_id",
+  "impact_so", "gene", "hgvsc", "hgvsp", "aaf", "gno_af_all",
+  "exac_num_hom_alt", "clinvar_id", "rs_ids", "GoogleScholar"),
+  in_silico = c("test", "pos_id", "gene", "impact_so", "cadd_phred",
+  "ccr_pct_v1", "revel", "polyphen_score", "sift_score",
+  "metalr_rankscore", "genesplicer", "spliceregion", "linsight"),
   genotypes = c("test", "pos_id", "gene", "impact_so", "family_members",
   "family_genotypes"),
   extra_columns_to_retain = "^gno|rankscore$|*num*|^clin|*domain*|*codon*",

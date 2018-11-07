@@ -44,7 +44,7 @@ gemini_test_wrapper <- function(gemini_db,
   if (is.na(families)){
     gemini_query <- paste("gemini", test, 
                           "--filter \"", filter, "\"",
-                          "--min-gq", min_gq,
+                          "--min-gq", min_gq, ..., 
                           gemini_db, ">", tmp_file)
   }
   else{
