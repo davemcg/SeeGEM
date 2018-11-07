@@ -50,7 +50,7 @@ gemini_test_wrapper <- function(gemini_db,
   else{
     gemini_query <- paste("gemini", test, 
                           "--filter \"", filter, "\"",
-                          "--min-gq", min_gq,
+                          "--min-gq", min_gq, ..., 
                           "--families ", families, 
                           gemini_db, ">", tmp_file)
   }
