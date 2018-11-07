@@ -55,6 +55,7 @@ gemini_test_wrapper <- function(gemini_db,
                           gemini_db, ">", tmp_file)
   }
   cat(gemini_query)
+  cat('')
   system(gemini_query)
   # if no output from gemini, return empty tibble
   input <- tryCatch(fread(tmp_file), error = function(e) tibble())
