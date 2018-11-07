@@ -34,6 +34,8 @@ gemini_query_wrapper <- function(gemini_db, test_name="CUSTOM1", output = NA, ..
   gemini_query <- paste("gemini query --header -q", 
                         ...,
                         gemini_db, ">", tmp_file)
+  cat(gemini_query)
+  cat('')
   system(gemini_query)
   input <- fread(tmp_file)
   # force chromosomes as characters, to avoid issues with X, Y
