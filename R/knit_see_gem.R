@@ -17,6 +17,11 @@
 #' @param peddy_path_prefix Path and prefix for the peddy output
 #' @param peddy_id A character vector of the samples you want to highlight in the
 #' peddy QC tab
+#' @param decorate TRUE or FALSE. If set to TRUE (default), then the data frame 
+#' given as input `GEMINI_data` will be decorated with the default settings for
+#' \code{\link{See_GEM_formatter}}. If you have already run this function on
+#' the data frame you are giving to \code{\link{knit_see_gem}}, then set this
+#' to FALSE.
 #' @param skip_stats If set to 'yes' this will use an alternate template which
 #' has no `peddy QC` tab. 
 #' 
@@ -54,6 +59,7 @@ knit_see_gem <- function(rmd = system.file("rmd/document_template.Rmd", package=
                          title = "SeeGEM Test Report",
                          peddy_path_prefix = paste0(system.file("extdata/", package="SeeGEM"), "/SEE_GEM_PEDDY"),
                          peddy_id = c('1045', '1046', '1265'),
+                         decorate = TRUE,
                          skip_stats = 'no'){
   
   # if data given as character, assume it's a path to an Rdata file
@@ -81,6 +87,7 @@ knit_see_gem <- function(rmd = system.file("rmd/document_template.Rmd", package=
                                     sample_name = sample_name,
                                     title = title,
                                     peddy_id = peddy_id,
+                                    decorate = decorate,
                                     peddy_path_prefix = peddy_path_prefix))
   } else{
     rmarkdown::render(system.file("rmd/document_template_noStats.Rmd", package="SeeGEM"),
@@ -88,6 +95,7 @@ knit_see_gem <- function(rmd = system.file("rmd/document_template.Rmd", package=
                       output_dir = output_directory,
                       params = list(GEMINI_data_frame = GEMINI_data,
                                     sample_name = sample_name,
+                                    decorate = decorate,
                                     title = title))
   }
   

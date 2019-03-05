@@ -1,6 +1,6 @@
 Package: SeeGEM
 Title: Integrate 'GEMINI' (and 'peddy') Output into Interactive Html Document
-Version: 0.1.6
+Version: 0.1.7
 Authors@R: person('David', 'McGaughey', 
       email = 'mcgaughey@gmail.com', 
       role = c('aut','cre'))
@@ -28,7 +28,8 @@ Imports: dplyr,
   knitr,
   DT,
   vcfR
-RoxygenNote: 6.1.0
+Encoding: UTF-8
+RoxygenNote: 6.1.1
 VignetteBuilder: knitr
 License: CC0
 LazyData: true
