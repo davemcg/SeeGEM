@@ -14,7 +14,7 @@ params:
   table_width:
     value: 1500
   decorate:
-    value: TRUE
+    value: decorate
 ---
 
 ```{r Set parameter loading, include = FALSE}

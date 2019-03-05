@@ -70,7 +70,9 @@ knit_see_gem <- function(rmd = system.file("rmd/document_template.Rmd", package=
   }
   
   # warn if nrow or ncol is 0 for input data 
-  if ((nrow(GEMINI_data) == 0 | ncol(GEMINI_data) == 0)){
+  if (decorate == FALSE){
+    document_data <- GEMINI_data
+  } else if ((nrow(GEMINI_data) == 0 | ncol(GEMINI_data) == 0)){
     warning('Empty data frame given as input!')
     document_data <- GEMINI_data
   } else { 
