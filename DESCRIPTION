@@ -13,7 +13,7 @@ Description: An interactive html document highlighting interesting DNA variants 
   markdown template into an interactive html document, which can be used in a 
   modern web browser. It is also easy to integrate 'peddy' quality control results 
   into the SeeGEM output to efficiently identify samples which have technical issues. 
-Depends: R (>= 3.4.0), 
+Depends: R (>= 3.4.0)
 Imports: dplyr, 
   tidyr, 
   readr,

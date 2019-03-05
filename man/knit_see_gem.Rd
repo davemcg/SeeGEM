@@ -11,7 +11,7 @@ knit_see_gem(rmd = system.file("rmd/document_template.Rmd", package =
   "SeeGEM"), sample_name = NA, title = "SeeGEM Test Report",
   peddy_path_prefix = paste0(system.file("extdata/", package = "SeeGEM"),
   "/SEE_GEM_PEDDY"), peddy_id = c("1045", "1046", "1265"),
-  skip_stats = "no")
+  decorate = TRUE, skip_stats = "no")
 }
 \arguments{
 \item{rmd}{Path to a custom R markdown file. A default R markdown file is 
@@ -36,6 +36,12 @@ which will return the GEMINI output as a data frame into your R session.}
 
 \item{peddy_id}{A character vector of the samples you want to highlight in the
 peddy QC tab}
+
+\item{decorate}{TRUE or FALSE. If set to TRUE (default), then the data frame 
+given as input `GEMINI_data` will be decorated with the default settings for
+\code{\link{See_GEM_formatter}}. If you have already run this function on
+the data frame you are giving to \code{\link{knit_see_gem}}, then set this
+to FALSE.}
 
 \item{skip_stats}{If set to 'yes' this will use an alternate template which
 has no `peddy QC` tab.}
